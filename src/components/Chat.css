@@ -1,0 +1,11 @@
+textarea {
+    display: block;
+    width: 80%;
+    overflow: hidden;
+    resize: both;
+    min-height: 1.5rem;
+    line-height: 1rem;
+    margin-right: 1rem;
+    border: 1px solid white;
+    text-align: left;
+  }

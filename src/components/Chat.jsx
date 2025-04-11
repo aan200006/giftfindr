@@ -1,5 +1,6 @@
 // src/Chat.js
 import React, { useState } from 'react';
+import "./Chat.css"
 
 const KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
@@ -47,7 +48,7 @@ const Chat = () => {
   };
 
   return (
-    <div style={{ width: '500px', margin: 'auto' }}>
+    <div style={{ maxWidth: '750px', margin: 'auto' }}>
       <div style={{ minHeight: '300px', borderRadius: '1rem', border: '2px solid #CBC3E3', padding: '1rem', marginBottom: '1rem' }}>
         {messages.map((msg, idx) => (
           <div key={idx} style={{ marginBottom: '1rem', textAlign: msg.role === 'user' ? 'right' : 'left' }}>
@@ -55,17 +56,18 @@ const Chat = () => {
           </div>
         ))}
       </div>
-      <input
-        type="text"
+      <div className="flex">
+      <textarea
         value={input}
-        placeholder=" Type your message..."
+        placeholder="Type your message..."
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        style={{ width: '80%', marginRight: '1rem', height: '1.75rem' }}
+        style={{flex: 1, padding: '5px 10px'}}
       />
-      <button onClick={sendMessage} disabled={loading}>
+      <button onClick={sendMessage} disabled={loading} style={{flex: '0 0 auto', height: '3rem'}}>
         {loading ? 'Sending...' : 'Send'}
       </button>
+      </div>
     </div>
   );
 };
