@@ -1,15 +1,72 @@
 // src/Chat.js
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import "./Chat.css"
+import axios from "axios";
 
-const KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
 const Chat = () => {
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hi! Ask me anything.' }
+    { role: 'assistant', content: 'Hi! What can I help you look for?' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState({});
+  const [products, setProducts] = useState([]);
+  const [productMsg, setProductMsg] = useState('');
+
+  const getAgeGroup = (age) => {
+    switch(true) {
+      case age < 2:
+        return "infant";
+      case age < 5:
+        return "toddler";
+      case age < 10:
+        return "child";
+      case age < 13:
+        return "preteen";
+      case age < 18:
+        return "teen";
+      default:
+        return "adult";
+    }
+  };
+
+  const getProducts = async (search) => {
+    let interests = search.interests;
+    let age = search.age;
+    try {
+      if (Array.isArray(search.interests)) {
+        interests = search.interests.join(' ');
+      }
+      if (interests == null) {
+        interests = 'gift';
+      }
+      if (age != null) {
+        const ageGroup = getAgeGroup(age);
+        interests = interests + " " + ageGroup;
+      }
+      console.log(interests);
+      const response = await axios.post('http://localhost:5000/api/etsy/listings', {
+        search: interests,
+        min: search.min_budget || null,
+        max: search.max_budget || null
+      });
+      const prods = response.data;
+      setProducts(prods);
+      const productMessage = prods.slice(0, 5).map((item, index) => (
+        `\n${index + 1}. [${item.title}](${item.url}) - $${item.price.amount / item.price.divisor}\n`
+      )).join('\n');
+
+      console.log(products);
+      if (prods != null) {
+        setProductMsg(productMessage);
+        setMessages((previous) => [...previous,  { role: 'assistant', content: `${productMessage}` }]);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -20,21 +77,33 @@ const Chat = () => {
     setLoading(true);
 
     try {
-      const res = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": `Bearer ${KEY}`
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: newMessages
-        })
+      const res = await axios.post('http://localhost:5000/api/chatbot', {
+        messages: newMessages
+      });
+      const queryRes = await axios.post('http://localhost:5000/api/chatbot/json', {
+        messages: newMessages,
+        previousStructuredData: query
       });
 
-      const data = await res.json();
-      const reply = data.choices[0].message.content;
+      const reply = res.data.message;
+      const reply2 = queryRes.data.structured;
 
+      console.log(reply2);
+      
+      if (reply2 != null) {
+        setQuery(prevQuery => ({
+          ...prevQuery,
+          interests: reply2.interests || prevQuery.interests, 
+          age: reply2.age || prevQuery.age, 
+          min_budget: reply2.min_budget || prevQuery.min_budget, 
+          max_budget: reply2.max_budget || prevQuery.max_budget 
+        }));
+      }
+      if (query != null) {
+        getProducts(query);
+        console.log(products);
+      }
+      console.log("query", query);
       setMessages((previous) => [...previous,  { role: 'assistant', content: reply }]);
     } catch (err) {
       console.error('Error:', err);
@@ -49,10 +118,10 @@ const Chat = () => {
 
   return (
     <div style={{ maxWidth: '750px', margin: 'auto' }}>
-      <div style={{ minHeight: '300px', borderRadius: '1rem', border: '2px solid #CBC3E3', padding: '1rem', marginBottom: '1rem' }}>
+      <div style={{ minHeight: '300px', border: '2px solid #CBC3E3', padding: '1rem', marginBottom: '1rem' }}>
         {messages.map((msg, idx) => (
           <div key={idx} style={{ marginBottom: '1rem', textAlign: msg.role === 'user' ? 'right' : 'left' }}>
-            <strong style={{ color: msg.role === 'user' ? '' : '#bda4dd'}}>{msg.role === 'user' ? 'You' : 'Bot'}:</strong> {msg.content}
+            <strong style={{ color: msg.role === 'user' ? '' : '#bda4dd'}}>{msg.role === 'user' ? 'You' : 'GiftFindr'}:</strong><ReactMarkdown>{msg.content}</ReactMarkdown>
           </div>
         ))}
       </div>
