@@ -1,0 +1,25 @@
+// src/Chat.js
+import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import "./Products.css"
+import axios from "axios";
+
+
+const Products = (props) => {
+  const [products, setProducts] = useState(props.products);
+
+  useEffect(() => {
+    setProducts(props.products);
+  }, [props.products]);
+
+  return (
+    <div style={{ maxWidth: '500px', margin: 'auto' }}>
+      <div style={{ minHeight: '300px', maxHeight: '500px', padding: '1rem', marginBottom: '4.6rem' }}>
+        <ReactMarkdown>{products}</ReactMarkdown>
+        
+    </div>
+    </div>
+  );
+};
+
+export default Products;

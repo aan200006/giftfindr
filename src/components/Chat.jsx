@@ -1,9 +1,8 @@
 // src/Chat.js
 import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import "./Chat.css"
+import "./Chat.css";
+import Products from './Products/Products';
 import axios from "axios";
-
 
 const Chat = () => {
   const [messages, setMessages] = useState([
@@ -61,7 +60,6 @@ const Chat = () => {
       console.log(products);
       if (prods != null) {
         setProductMsg(productMessage);
-        setMessages((previous) => [...previous,  { role: 'assistant', content: `${productMessage}` }]);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -117,11 +115,12 @@ const Chat = () => {
   };
 
   return (
-    <div style={{ maxWidth: '750px', margin: 'auto' }}>
-      <div style={{ minHeight: '300px', border: '2px solid #CBC3E3', padding: '1rem', marginBottom: '1rem' }}>
+    <div className='flex'>
+    <div style={{ maxWidth: '700px', margin: 'auto' }}>
+      <div style={{ minHeight: '300px', maxHeight: '500px', overflowY: 'auto', border: '2px solid #CBC3E3', padding: '1rem', marginBottom: '1rem' }}>
         {messages.map((msg, idx) => (
           <div key={idx} style={{ marginBottom: '1rem', textAlign: msg.role === 'user' ? 'right' : 'left' }}>
-            <strong style={{ color: msg.role === 'user' ? '' : '#bda4dd'}}>{msg.role === 'user' ? 'You' : 'GiftFindr'}:</strong><ReactMarkdown>{msg.content}</ReactMarkdown>
+            <strong style={{ color: msg.role === 'user' ? '' : '#bda4dd'}}>{msg.role === 'user' ? 'You' : 'GiftFindr'}:</strong>{msg.content}
           </div>
         ))}
       </div>
@@ -137,6 +136,8 @@ const Chat = () => {
         {loading ? 'Sending...' : 'Send'}
       </button>
       </div>
+    </div>
+    <Products products={productMsg}/>
     </div>
   );
 };
