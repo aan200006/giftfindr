@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Gold.json Labeler</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 1em;
+      }
+      .product {
+        margin: 0.5em 0;
+      }
+      .controls {
+        margin: 1em 0;
+        display: flex;
+        gap: 1em;
+        align-items: center;
+      }
+      #products {
+        max-height: 300px;
+        overflow: auto;
+        border: 1px solid #ccc;
+        padding: 0.5em;
+      }
+      .highlight {
+        background-color: yellow;
+        font-weight: bold;
+      }
+      .filter-highlight {
+        background-color: lightgreen;
+        font-weight: bold;
+      }
+      input,
+      button {
+        padding: 0.5em 1em;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+        outline: none;
+      }
+      input:focus {
+        border-color: #888;
+      }
+      button:hover {
+        background-color: #f0f0f0;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Gold.json Labeler</h1>
+    <p>
+      Click a product’s text to toggle its checkbox. ← / → arrows to Prev/Next.
+      Del key or “Remove Query” to drop this query and skip. Apply filters then
+      Export when done.
+    </p>
+    <div>
+      <label
+        >Filter products: <input id="filter" placeholder="search title…"
+      /></label>
+      <label
+        >Min Price: <input id="minPrice" type="number" placeholder="0"
+      /></label>
+      <label
+        >Max Price: <input id="maxPrice" type="number" placeholder="Any"
+      /></label>
+      <label
+        >By Query Words: <input id="filterByQuery" type="checkbox"
+      /></label>
+    </div>
+    <h2 id="query"></h2>
+    <div id="products"></div>
+    <div class="controls">
+      <button id="prev">← Prev</button>
+      <button id="next">Next →</button>
+      <button id="remove">Remove Query</button>
+      <button id="overwrite">Export gold.json</button>
+    </div>
+    <script src="./label.js"></script>
+  </body>
+</html>

@@ -16,6 +16,7 @@ Usage:
       --model all-mpnet-base-v2
 """
 
+import os
 import argparse
 import json
 import numpy as np
@@ -24,28 +25,37 @@ import pandas as pd
 from sentence_transformers import SentenceTransformer
 
 
+BASE = os.path.dirname(__file__)
+DATA = os.path.abspath(os.path.join(BASE, "../data"))
+OUTPUT = os.path.abspath(os.path.join(BASE, "../output"))
+os.makedirs(OUTPUT, exist_ok=True)
+
+
 def parse_args():
-    parser = argparse.ArgumentParser(description="Evaluate FAISS-based retrieval")
+    parser = argparse.ArgumentParser(...)
     parser.add_argument(
         "--products",
         type=str,
-        default="products.json",
-        help="Path to products JSON file",
+        default=os.path.join(DATA, "products.json"),
+        help="Path to products JSON",
     )
     parser.add_argument(
         "--id-map",
         type=str,
-        default="id_map.json",
-        help="Path to JSON list mapping index positions to product IDs",
+        default=os.path.join(OUTPUT, "id_map.json"),
+        help="Path to ID map JSON",
     )
     parser.add_argument(
-        "--index", type=str, default="faiss_index.idx", help="Path to FAISS index file"
+        "--index",
+        type=str,
+        default=os.path.join(OUTPUT, "faiss_index.idx"),
+        help="Path to FAISS index file",
     )
     parser.add_argument(
         "--gold",
         type=str,
-        default="gold.json",
-        help="Path to gold-standard queries JSON file",
+        default=os.path.join(DATA, "gold.json"),
+        help="Path to gold-standard JSON",
     )
     parser.add_argument(
         "--k",
@@ -167,12 +177,11 @@ def main():
     print("\nRetrieval Evaluation Metrics:")
     print(df)
 
-    # Save metrics to JSON and CSV
-    with open("eval_results.json", "w", encoding="utf-8") as f:
+    # Save metrics into output/
+    with open(os.path.join(OUTPUT, "eval_results.json"), "w", encoding="utf-8") as f:
         json.dump(metrics, f, indent=2)
-    df.to_csv("eval_results.csv")
-
-    print("\nSaved detailed metrics to eval_results.json and eval_results.csv")
+    df.to_csv(os.path.join(OUTPUT, "eval_results.csv"))
+    print(f"Saved metrics → {OUTPUT}")
 
 
 if __name__ == "__main__":

@@ -1,13 +1,20 @@
+import os
 import json
 import numpy as np
 from sentence_transformers import SentenceTransformer
 import faiss
 
-# Load index and mappings
-index = faiss.read_index("faiss_index.idx")
-ids = json.load(open("id_map.json", "r", encoding="utf-8"))
+BASE = os.path.dirname(__file__)
+DATA = os.path.abspath(os.path.join(BASE, "../data"))
+OUTPUT = os.path.abspath(os.path.join(BASE, "../output"))
+
+index = faiss.read_index(os.path.join(OUTPUT, "faiss_index.idx"))
+ids = json.load(open(os.path.join(OUTPUT, "id_map.json"), "r", encoding="utf-8"))
 products = {
-    item["id"]: item for item in json.load(open("products.json", "r", encoding="utf-8"))
+    item["id"]: item
+    for item in json.load(
+        open(os.path.join(DATA, "products.json"), "r", encoding="utf-8")
+    )
 }
 model = SentenceTransformer("all-mpnet-base-v2")
 

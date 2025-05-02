@@ -1,0 +1,30 @@
+{
+  "general": [
+    "gift",
+    "friend gift",
+    "personalized gift",
+    "handmade gift",
+    "eco-friendly gift"
+  ],
+  "recipient": [
+    "gift for mom",
+    "gift for dad",
+    "teacher gift",
+    "baby shower gift",
+    "corporate gift"
+  ],
+  "occasion": [
+    "birthday gift",
+    "anniversary gift",
+    "wedding gift",
+    "housewarming gift",
+    "graduation gift"
+  ],
+  "seasonal": [
+    "holiday gift",
+    "Christmas gift",
+    "Valentine’s Day gift",
+    "Mother’s Day gift",
+    "Father’s Day gift"
+  ]
+}

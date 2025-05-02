@@ -29,3 +29,7 @@ faiss_index.idx
 id_map.json
 eval_results.json
 eval_results.csv
+*.npy
+
+# Python
+__pycache__/
