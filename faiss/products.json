@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "title": "Smart yoga mat with guided workouts",
+    "description": "A high‑tech yoga mat that syncs with your phone to offer real‑time posture guidance.",
+    "category": "fitness",
+    "price": 45.99
+  },
+  {
+    "id": 2,
+    "title": "Custom protein shaker with motivational quote",
+    "description": "Double‑walled stainless steel shaker, personalized with any text you choose.",
+    "category": "fitness",
+    "price": 25.99
+  },
+  {
+    "id": 3,
+    "title": "Wireless charging desk lamp",
+    "description": "Modern LED lamp with built‑in wireless charger for smartphones.",
+    "category": "tech",
+    "price": 39.95
+  },
+  {
+    "id": 4,
+    "title": "Eco-friendly bamboo cutting board set",
+    "description": "Durable, knife‑friendly boards with juice grooves.",
+    "category": "kitchen",
+    "price": 28.5
+  },
+  {
+    "id": 5,
+    "title": "Insulated stainless steel travel mug",
+    "description": "Keeps beverages hot or cold for up to 12 hours.",
+    "category": "kitchen",
+    "price": 24.99
+  },
+  {
+    "id": 6,
+    "title": "Personalized photo album",
+    "description": "Beautiful leather-bound album with customizable cover and 50 pages for cherished memories.",
+    "category": "sentimental",
+    "price": 35.5
+  },
+  {
+    "id": 7,
+    "title": "Indoor herb gardening starter kit",
+    "description": "Complete set with organic seeds, biodegradable pots, soil, and detailed instructions for growing herbs indoors.",
+    "category": "hobby",
+    "price": 29.99
+  },
+  {
+    "id": 8,
+    "title": "Wireless noise-cancelling headphones",
+    "description": "Premium sound quality with active noise cancellation and comfortable over-ear design, perfect for music lovers.",
+    "category": "tech",
+    "price": 89.99
+  },
+  {
+    "id": 9,
+    "title": "Handcrafted leather wallet",
+    "description": "Genuine full-grain leather wallet with RFID protection and multiple card slots, built to last for years.",
+    "category": "fashion",
+    "price": 49.95
+  },
+  {
+    "id": 10,
+    "title": "Gourmet chocolate assortment box",
+    "description": "Selection of 16 premium handmade chocolates with unique flavors from around the world.",
+    "category": "food",
+    "price": 18.99
+  },
+  {
+    "id": 11,
+    "title": "DIY craft cocktail kit",
+    "description": "Everything needed to make professional-quality cocktails at home, including recipes, tools, and premium mixers.",
+    "category": "entertainment",
+    "price": 42.0
+  },
+  {
+    "id": 12,
+    "title": "Smart water bottle with hydration tracking",
+    "description": "Bluetooth-enabled bottle that connects to your phone, tracks water intake, and reminds you to stay hydrated.",
+    "category": "fitness",
+    "price": 36.99
+  },
+  {
+    "id": 13,
+    "title": "Strategy board game for groups",
+    "description": "Award-winning board game that combines strategy and teamwork, perfect for 2-6 players ages 10 and up.",
+    "category": "entertainment",
+    "price": 32.5
+  },
+  {
+    "id": 14,
+    "title": "Aromatherapy scented candle collection",
+    "description": "Set of three natural soy wax candles with essential oils for relaxation, stress relief, and mood enhancement.",
+    "category": "home",
+    "price": 22.95
+  },
+  {
+    "id": 15,
+    "title": "Guided productivity planner and journal",
+    "description": "Structured daily planner with goal-setting framework, habit tracker, and mindfulness prompts for increased productivity.",
+    "category": "office",
+    "price": 19.99
+  }
+]

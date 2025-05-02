@@ -1,0 +1,122 @@
+[
+  {
+    "query": "gift for a yoga lover on a budget",
+    "relevant_ids": [1]
+  },
+  {
+    "query": "motivational fitness gift under $30",
+    "relevant_ids": [2, 5]
+  },
+  {
+    "query": "stylish desk accessory that charges my phone",
+    "relevant_ids": [3]
+  },
+  {
+    "query": "eco-friendly kitchen gift for someone who loves cooking",
+    "relevant_ids": [4]
+  },
+  {
+    "query": "something to keep coffee hot on the go",
+    "relevant_ids": [5]
+  },
+  {
+    "query": "sentimental gift for mom's birthday",
+    "relevant_ids": [6]
+  },
+  {
+    "query": "hobby gift for dad who likes gardening",
+    "relevant_ids": [7]
+  },
+  {
+    "query": "tech gift for teenager who loves music",
+    "relevant_ids": [8]
+  },
+  {
+    "query": "classy gift for boyfriend under $50",
+    "relevant_ids": [9]
+  },
+  {
+    "query": "sweet treat gift for colleague",
+    "relevant_ids": [10]
+  },
+  {
+    "query": "housewarming gift for someone who enjoys cocktails",
+    "relevant_ids": [11]
+  },
+  {
+    "query": "fitness tracker for health-conscious friend",
+    "relevant_ids": [12]
+  },
+  {
+    "query": "family game night gift",
+    "relevant_ids": [13]
+  },
+  {
+    "query": "relaxing gift for stressed teacher",
+    "relevant_ids": [14]
+  },
+  {
+    "query": "productivity gift for office",
+    "relevant_ids": [15]
+  },
+  {
+    "query": "cheap birthday present for yoga enthusiast",
+    "relevant_ids": [1]
+  },
+  {
+    "query": "gift for my techie brother who has everything",
+    "relevant_ids": [3, 8, 12]
+  },
+  {
+    "query": "eco gift for vegan friend",
+    "relevant_ids": [4, 7]
+  },
+  {
+    "query": "present for coffee addict coworker",
+    "relevant_ids": [5]
+  },
+  {
+    "query": "meaningful anniversary gift under a hundred bucks",
+    "relevant_ids": [6]
+  },
+  {
+    "query": "gift for someone with green thumb",
+    "relevant_ids": [7]
+  },
+  {
+    "query": "noise blocking headset for WFH setup",
+    "relevant_ids": [8]
+  },
+  {
+    "query": "stylish but practical gift for dad",
+    "relevant_ids": [3, 9]
+  },
+  {
+    "query": "tasty gift basket under 20 dollars",
+    "relevant_ids": [10]
+  },
+  {
+    "query": "DIY gift for party host",
+    "relevant_ids": [11]
+  },
+  {
+    "query": "smart gadget for fitness junkie",
+    "relevant_ids": [1, 12]
+  },
+  {
+    "query": "something fun for family reunion",
+    "relevant_ids": [13]
+  },
+  {
+    "query": "self-care package for bestie",
+    "relevant_ids": [14]
+  },
+  {
+    "query": "gift to help with organization and goals",
+    "relevant_ids": [15]
+  },
+  {
+    "query": "fashionable accessory for professional man",
+    "relevant_ids": [9]
+  }
+]
