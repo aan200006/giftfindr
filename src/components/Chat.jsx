@@ -46,15 +46,18 @@ const Chat = () => {
         interests = interests + " " + ageGroup;
       }
       console.log(interests);
-      const response = await axios.post('http://localhost:5000/api/etsy/listings', {
-        search: interests,
-        min: search.min_budget || null,
-        max: search.max_budget || null
+      // const response = await axios.post('http://localhost:5000/api/etsy/listings', {
+      //   search: interests,
+      //   min: search.min_budget || null,
+      //   max: search.max_budget || null
+      // });
+      const response = await axios.post('http://localhost:5001/api/search', {
+        query: interests
       });
       const prods = response.data;
       setProducts(prods);
       const productMessage = prods.slice(0, 5).map((item, index) => (
-        `\n${index + 1}. [${item.title}](${item.url}) - $${item.price.amount / item.price.divisor}\n`
+        `\n${index + 1}. [${item.title}](${item.url}) - $${item.price}\n`
       )).join('\n');
 
       console.log(products);
@@ -75,10 +78,10 @@ const Chat = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/chatbot', {
+      const res = await axios.post('http://localhost:5001/api/chatbot', {
         messages: newMessages
       });
-      const queryRes = await axios.post('http://localhost:5000/api/chatbot/json', {
+      const queryRes = await axios.post('http://localhost:5001/api/chatbot/json', {
         messages: newMessages,
         previousStructuredData: query
       });

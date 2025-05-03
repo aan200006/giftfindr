@@ -1,10 +1,10 @@
+
 import os
 import json
 import numpy as np
 import argparse
 from sentence_transformers import SentenceTransformer
 import faiss
-
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Semantic search using FAISS")
@@ -19,10 +19,11 @@ def parse_args():
     )
     return parser.parse_args()
 
-
 BASE = os.path.dirname(__file__)
-DATA = os.path.abspath(os.path.join(BASE, "../data"))
-OUTPUT = os.path.abspath(os.path.join(BASE, "../output"))
+DATA = os.path.abspath(os.path.join(BASE, "./data"))
+OUTPUT = os.path.abspath(os.path.join(BASE, "./output"))
+
+model = SentenceTransformer("all-mpnet-base-v2")
 
 args = parse_args()
 
@@ -34,8 +35,6 @@ products = {
         open(os.path.join(DATA, args.products), "r", encoding="utf-8")
     )
 }
-model = SentenceTransformer("all-mpnet-base-v2")
-
 
 def semantic_search(query: str, k: int = 5):
     q_emb = model.encode([query])
@@ -51,24 +50,8 @@ def semantic_search(query: str, k: int = 5):
                 "title": item["title"],
                 "category": item.get("category"),
                 "price": item.get("price"),
+                "url": item.get("url"),
                 "distance": float(dist),
             }
         )
     return results
-
-
-if __name__ == "__main__":
-    print(
-        f"Using index: {args.index}, id map: {args.id_map}, products: {args.products}"
-    )
-    while True:
-        q = input("Enter search query (or 'quit'): ")
-        if q.lower() == "quit":
-            break
-        hits = semantic_search(q, k=5)
-        print("Top results:")
-        for h in hits:
-            print(
-                f"- {h['title']} (${h['price']}) [{h['category']}] (dist={h['distance']:.3f})"
-            )
-        print()
