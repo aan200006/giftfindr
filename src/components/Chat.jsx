@@ -52,9 +52,17 @@ const Chat = () => {
       //   max: search.max_budget || null
       // });
       const response = await axios.post('http://localhost:5001/api/search', {
-        query: interests
+        // query: interests JAMES: For now, I am going to DIRECTLY send the query to FAISS through here.
+        query: search,
       });
+
+      if (response.status !== 200) {
+        console.error('Error fetching products:', response.statusText);
+        return;
+      }
+
       const prods = response.data;
+
       setProducts(prods);
       const productMessage = prods.slice(0, 5).map((item, index) => (
         `\n${index + 1}. [${item.title}](${item.url}) - $${item.price}\n`
@@ -101,7 +109,8 @@ const Chat = () => {
         }));
       }
       if (query != null) {
-        getProducts(query);
+        //getProducts(query); // JAMES: For now, I am going to DIRECTLY send the query to FAISS through here.
+        getProducts(input);
         console.log(products);
       }
       console.log("query", query);
