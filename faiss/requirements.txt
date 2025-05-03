@@ -1,2 +1,4 @@
 faiss-cpu
 sentence-transformers
+openai
+python-dotenv

@@ -23,3 +23,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# FAISS related (For Now)
+# *.idx
+# id_map.json
+# eval_results.json
+# eval_results.csv
+# *.npy
+
+# Python
+__pycache__/
