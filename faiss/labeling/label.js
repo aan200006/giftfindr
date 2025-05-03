@@ -2,8 +2,7 @@
 let gold,
   products,
   idx = 0;
-let history = [],
-  queueIndices = [],
+let queueIndices = [],
   cIdx = 0;
 const qEl = document.getElementById("query"),
   productsEl = document.getElementById("products"),
@@ -19,16 +18,12 @@ const qEl = document.getElementById("query"),
 Promise.all([
   fetch("../data/gold.json").then((r) => r.json()),
   fetch("../data/products.json").then((r) => r.json()),
-  fetch("../data/history.json").then((r) => r.json()),
-]).then(([g, p, h]) => {
+]).then(([g, p]) => {
   gold = g;
   products = p;
-  history = h;
-  queueIndices = gold
-    .map((_, i) => i)
-    .filter((i) => !history.some((h) => h.index === i));
+  queueIndices = gold.map((_, i) => i);
   if (!queueIndices.length) {
-    qEl.textContent = "Done! Well done!";
+    qEl.textContent = "No queries found!";
     productsEl.innerHTML = "";
     return;
   }
@@ -164,9 +159,6 @@ prevBtn.onclick = () => {
 };
 
 nextBtn.onclick = () => {
-  // record current item in history
-  history = history.filter((h) => h.index !== idx);
-  history.push({ index: idx, relevant_ids: gold[idx].relevant_ids });
   // advance queue
   cIdx++;
   if (cIdx >= queueIndices.length) {
@@ -179,13 +171,10 @@ nextBtn.onclick = () => {
 };
 
 removeBtn.onclick = () => {
-  // remove current query from gold & history
+  // remove current query from gold
   gold.splice(idx, 1);
-  history = history.filter((h) => h.index !== idx);
-  // rebuild queue ignoring history
-  queueIndices = gold
-    .map((_, i) => i)
-    .filter((i) => !history.some((h) => h.index === i));
+  // rebuild queue
+  queueIndices = gold.map((_, i) => i);
   // if none left, finish
   if (!queueIndices.length) {
     qEl.textContent = "Done! Well done!";
@@ -198,7 +187,7 @@ removeBtn.onclick = () => {
   render();
 };
 
-// Update the overwrite button to be the only export option
+// Update the export button
 overwriteBtn.onclick = () => {
   // Create gold.json
   const goldBlob = new Blob([JSON.stringify(gold, null, 2)], {
@@ -207,27 +196,15 @@ overwriteBtn.onclick = () => {
   const goldUrl = URL.createObjectURL(goldBlob);
   const goldLink = document.createElement("a");
   goldLink.href = goldUrl;
-  goldLink.download = "gold.json"; // Fixed name without prefix
+  goldLink.download = "gold.json";
   goldLink.click();
   URL.revokeObjectURL(goldUrl);
 
-  // Create history.json
-  const historyBlob = new Blob([JSON.stringify(history, null, 2)], {
-    type: "application/json",
-  });
-  const historyUrl = URL.createObjectURL(historyBlob);
-  const historyLink = document.createElement("a");
-  historyLink.href = historyUrl;
-  historyLink.download = "history.json"; // Fixed name without prefix
-  historyLink.click();
-  URL.revokeObjectURL(historyUrl);
-
   // Show user instructions
   alert(
-    "Files have been downloaded. To complete the overwrite:\n\n" +
-      "1. Move gold.json to /faiss/data/\n" +
-      "2. Move history.json to /faiss/data/\n\n" +
-      "This will replace the existing files."
+    "gold.json has been downloaded. To complete the overwrite:\n\n" +
+      "Move gold.json to /faiss/data/\n\n" +
+      "This will replace the existing file."
   );
 };
 

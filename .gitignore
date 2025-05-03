@@ -25,7 +25,7 @@ dist-ssr
 *.sw?
 
 # FAISS related (For Now)
-faiss_index.idx
+*.idx
 id_map.json
 eval_results.json
 eval_results.csv

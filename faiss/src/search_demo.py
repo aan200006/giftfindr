@@ -1,19 +1,37 @@
 import os
 import json
 import numpy as np
+import argparse
 from sentence_transformers import SentenceTransformer
 import faiss
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Semantic search using FAISS")
+    parser.add_argument(
+        "--index", default="faiss_index.idx", help="FAISS index filename"
+    )
+    parser.add_argument(
+        "--id-map", default="id_map.json", help="ID mapping JSON filename"
+    )
+    parser.add_argument(
+        "--products", default="products.json", help="Products JSON filename"
+    )
+    return parser.parse_args()
+
 
 BASE = os.path.dirname(__file__)
 DATA = os.path.abspath(os.path.join(BASE, "../data"))
 OUTPUT = os.path.abspath(os.path.join(BASE, "../output"))
 
-index = faiss.read_index(os.path.join(OUTPUT, "faiss_index.idx"))
-ids = json.load(open(os.path.join(OUTPUT, "id_map.json"), "r", encoding="utf-8"))
+args = parse_args()
+
+index = faiss.read_index(os.path.join(OUTPUT, args.index))
+ids = json.load(open(os.path.join(OUTPUT, args.id_map), "r", encoding="utf-8"))
 products = {
     item["id"]: item
     for item in json.load(
-        open(os.path.join(DATA, "products.json"), "r", encoding="utf-8")
+        open(os.path.join(DATA, args.products), "r", encoding="utf-8")
     )
 }
 model = SentenceTransformer("all-mpnet-base-v2")
@@ -40,6 +58,9 @@ def semantic_search(query: str, k: int = 5):
 
 
 if __name__ == "__main__":
+    print(
+        f"Using index: {args.index}, id map: {args.id_map}, products: {args.products}"
+    )
     while True:
         q = input("Enter search query (or 'quit'): ")
         if q.lower() == "quit":

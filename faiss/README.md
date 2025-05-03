@@ -9,9 +9,8 @@ Giftfindr is a prototype that turns natural-language gift queries into personali
 ```
 faiss/
 ├── data/
-│   ├── products.json        # Sample product catalog
-│   ├── gold.json            # Gold-standard queries and relevant item IDs
-│   └── history.json         # Labeling history tracking file
+│   └── products.json        # Sample product catalog
+│   └── gold.json            # Gold-standard queries and relevant item IDs
 ├── output/
 │   ├── faiss_index.idx      # Serialized FAISS index (built by build_index.py)
 │   ├── id_map.json          # Maps index positions back to product IDs
@@ -55,7 +54,7 @@ faiss/
 Generate or update your product catalog:
 
 ```bash
-python src/ingest/generate_products.py --sources etsy --limit 5 --out data/products.json
+python src/ingest/generate_products.py --sources etsy --limit 100 --out data/products.json
 ```
 
 This will:
@@ -118,8 +117,8 @@ Use the labeling tool to create a gold standard dataset for evaluation:
 
 2. Navigate to `http://localhost:8000/labeling/` in your browser
 3. Add relevant product IDs for each query
-4. Export the labeled data to `gold.json` and `history.json` when done
-5. Move these files to the `data/` directory
+4. Export the labeled data to `gold.json` when done
+5. Move the file to the `data/` directory
 
 ### 4. Try Semantic Search
 
@@ -136,7 +135,7 @@ Then enter a natural-language query (e.g. "gift for a yoga lover") and see the t
 To measure retrieval performance, run:
 
 ```bash
-python src/evaluate.py --k 1 5 10 20
+python src/evaluate.py --products data/products.json --id-map output/id_map.json --index output/faiss_index.idx --gold data/gold.json --k 1 5 10 20 --model all-mpnet-base-v2
 ```
 
 This computes metrics against your `data/gold.json`:
@@ -145,6 +144,8 @@ This computes metrics against your `data/gold.json`:
 - **Recall@K**: Fraction of all relevant items that appear in top-K.
 - **MRR@K**: Mean Reciprocal Rank (position of first relevant item).
 - **nDCG@K**: Normalized Discounted Cumulative Gain (quality of ranking).
+
+The results are saved to `output/eval_results.json` and `output/eval_results.csv`.
 
 ### Sample Output
 
@@ -155,6 +156,7 @@ K
 1      0.7000  0.6833  0.7000  0.7000
 5      0.2067  0.9333  0.8167  0.8572
 10     0.1100  0.9556  0.8222  0.8704
+20     0.0550  0.9667  0.8222  0.8761
 ```
 
 #### What This Means

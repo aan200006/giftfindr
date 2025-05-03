@@ -48,7 +48,7 @@ def parse_args():
     parser.add_argument(
         "--index",
         type=str,
-        default=os.path.join(OUTPUT, "faiss_index.idx"),
+        default="faiss_index.idx",
         help="Path to FAISS index file",
     )
     parser.add_argument(
@@ -74,6 +74,19 @@ def parse_args():
 
 
 def load_resources(products_path, id_map_path, index_path, gold_path, model_name):
+    # Check if paths are absolute, otherwise join with appropriate directory
+    if not os.path.isabs(products_path):
+        products_path = os.path.join(DATA, products_path)
+
+    if not os.path.isabs(id_map_path):
+        id_map_path = os.path.join(OUTPUT, id_map_path)
+
+    if not os.path.isabs(index_path):
+        index_path = os.path.join(OUTPUT, index_path)
+
+    if not os.path.isabs(gold_path):
+        gold_path = os.path.join(DATA, gold_path)
+
     # Load product metadata
     products = {
         item["id"]: item
