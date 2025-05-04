@@ -19,11 +19,13 @@ def parse_args():
     parser.add_argument(
         "--backend",
         choices=["sentence-transformers", "openai"],
-        default="sentence-transformers",
+        default="openai",
         help="Embedding backend",
     )
     parser.add_argument(
-        "--model", default="all-mpnet-base-v2", help="Model name for selected backend"
+        "--model",
+        default="text-embedding-3-small",
+        help="Model name for selected backend",
     )
     parser.add_argument(
         "--index-type",

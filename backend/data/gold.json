@@ -1,14 +1,184 @@
 [
   {
-    "query": "eco-friendly gift for coworker",
-    "relevant_ids": [4299907464]
+    "query": "anniversary gift, spouse, art",
+    "relevant_ids": [
+      4300364113,
+      842984677,
+      582120434,
+      1030299869,
+      1328683153
+    ]
   },
   {
-    "query": "personalized jewelry for mom’s anniversary",
-    "relevant_ids": [1772964276]
+    "query": "congratulations gift, brother, fitness",
+    "relevant_ids": [
+      1810711713,
+      1567475984,
+      271019550
+    ]
   },
   {
-    "query": "handmade home décor for housewarming",
-    "relevant_ids": [1760916482, 1245294823]
+    "query": "birthday gift, best friend, music",
+    "relevant_ids": [
+      1717604623,
+      1871311914,
+      1665973118,
+      1693473321,
+      1623536505
+    ]
+  },
+  {
+    "query": "engagement gift, coworker, technology",
+    "relevant_ids": []
+  },
+  {
+    "query": "get well soon gift, coworker, art",
+    "relevant_ids": [
+      1849801589,
+      792429025,
+      1800982063,
+      1271819601,
+      1888427306
+    ]
+  },
+  {
+    "query": "retirement gift, girlfriend, photography",
+    "relevant_ids": [
+      1874904038,
+      1886553735,
+      187491336,
+      4295337722,
+      1663965647
+    ]
+  },
+  {
+    "query": "farewell gift, mom, technology",
+    "relevant_ids": [
+      1865506097
+    ]
+  },
+  {
+    "query": "get well soon gift, dad, books",
+    "relevant_ids": [
+      1584427908,
+      1897780901,
+      1682774652,
+      1376655270,
+      1584425894
+    ]
+  },
+  {
+    "query": "birthday gift, brother, technology",
+    "relevant_ids": [
+      1291167311,
+      1452536496,
+      1466523441,
+      1466467425,
+      1452260096
+    ]
+  },
+  {
+    "query": "congratulations gift, best friend, travel",
+    "relevant_ids": [
+      884092399,
+      1838058078,
+      1883741828,
+      683799961,
+      1899724519
+    ]
+  },
+  {
+    "query": "wedding gift, boyfriend, art",
+    "relevant_ids": [
+      1725620689,
+      1744114000,
+      1774094395,
+      1598147046,
+      1040783125
+    ]
+  },
+  {
+    "query": "anniversary gift, grandparents, photography",
+    "relevant_ids": [
+      1551044052,
+      1488608065,
+      1045212838,
+      1745794470,
+      1713528311
+    ]
+  },
+  {
+    "query": "retirement gift, spouse, music",
+    "relevant_ids": [
+      1147675234,
+      579045215,
+      222216350,
+      708254698,
+      1868817375
+    ]
+  },
+  {
+    "query": "birthday gift, mom, gaming",
+    "relevant_ids": [
+      1832357891,
+      1822408610,
+      1827233404,
+      1823093506,
+      1903936131
+    ]
+  },
+  {
+    "query": "engagement gift, grandparents, art",
+    "relevant_ids": [
+      1541334103,
+      971928761,
+      1889785472,
+      4299866295,
+      1313400422
+    ]
+  },
+  {
+    "query": "get well soon gift, coworker, gaming",
+    "relevant_ids": []
+  },
+  {
+    "query": "anniversary gift, girlfriend, cooking",
+    "relevant_ids": [
+      4300351844,
+      1904840351,
+      4300351959,
+      1890661096,
+      1904840531
+    ]
+  },
+  {
+    "query": "new baby gift, best friend, fitness",
+    "relevant_ids": [
+      1897896775,
+      1817671780,
+      1887065409,
+      1409821244,
+      195382389
+    ]
+  },
+  {
+    "query": "housewarming gift, best friend, cooking",
+    "relevant_ids": [
+      781767442,
+      1796241446,
+      1724149097,
+      1005557291,
+      1313999115
+    ]
+  },
+  {
+    "query": "housewarming gift, sister, travel",
+    "relevant_ids": [
+      1838454292,
+      860052871,
+      4299942421,
+      1604872102,
+      590214239
+    ]
   }
 ]

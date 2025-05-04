@@ -1,30 +1,41 @@
 {
-  "general": [
-    "gift",
-    "friend gift",
-    "personalized gift",
-    "handmade gift",
-    "eco-friendly gift"
-  ],
   "recipient": [
-    "gift for mom",
-    "gift for dad",
-    "teacher gift",
-    "baby shower gift",
-    "corporate gift"
+    "mom",
+    "dad",
+    "sister",
+    "brother",
+    "best friend",
+    "grandparents",
+    "boyfriend",
+    "girlfriend",
+    "spouse",
+    "coworker"
   ],
   "occasion": [
-    "birthday gift",
-    "anniversary gift",
-    "wedding gift",
-    "housewarming gift",
-    "graduation gift"
+    "birthday",
+    "anniversary",
+    "wedding",
+    "housewarming",
+    "graduation",
+    "retirement",
+    "get well soon",
+    "engagement",
+    "new baby",
+    "promotion",
+    "farewell",
+    "congratulations"
   ],
-  "seasonal": [
-    "holiday gift",
-    "Christmas gift",
-    "Valentine’s Day gift",
-    "Mother’s Day gift",
-    "Father’s Day gift"
-  ]
+  "interest": [
+    "fitness",
+    "music",
+    "art",
+    "technology",
+    "travel",
+    "gaming",
+    "cooking",
+    "photography",
+    "gardening",
+    "books"
+  ],
+  "query_template": "{occasion} gift, {recipient}, {interest}"
 }

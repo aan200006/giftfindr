@@ -12,7 +12,7 @@ faiss/
 │   └── products.json        # Sample product catalog
 │   └── gold.json            # Gold-standard queries and relevant item IDs
 ├── output/
-│   ├── faiss_index.idx      # Serialized FAISS index (built by build_index.py)
+│   ├── faiss_index_flat.idx # Serialized FAISS index (built by build_index.py)
 │   ├── id_map.json          # Maps index positions back to product IDs
 │   ├── eval_results.json    # Evaluation metrics JSON output
 │   └── eval_results.csv     # Evaluation metrics CSV output
@@ -54,7 +54,7 @@ faiss/
 Generate or update your product catalog:
 
 ```bash
-python src/ingest/generate_products.py --sources etsy --limit 100 --out data/products.json
+python src/ingest/generate_products.py --sources etsy --items-per-query 5 --num-queries 20 --out data/products.json
 ```
 
 This will:
@@ -69,13 +69,13 @@ This will:
 Generate embeddings and create a searchable index:
 
 ```bash
-python src/build_index.py
+python src/build_index.py --index-type flat --model text-embedding-3-small --backend openai
 ```
 
 This will:
 
-- Load `data/products.json` and generate embeddings via SentenceTransformers.
-- Build an exact L2 FAISS index and save it to `output/faiss_index.idx`.
+- Load `data/products.json` and generate embeddings via OpenAI API.
+- Build an exact L2 FAISS index and save it to `output/faiss_index_flat.idx`.
 - Write the ID mapping to `output/id_map.json`.
 
 We support three index types:
@@ -87,13 +87,16 @@ We support three index types:
 Example:
 
 ```bash
-# exact
+# exact with OpenAI embeddings (default)
 python src/build_index.py --index-type flat
 
-# IVF-PQ
+# Using Sentence Transformers instead
+python src/build_index.py --backend sentence-transformers --model all-mpnet-base-v2
+
+# IVF-PQ with OpenAI
 python src/build_index.py --index-type ivfpq --nlist 200 --m 16 --nbits 8
 
-# HNSW
+# HNSW with OpenAI
 python src/build_index.py --index-type hnsw --hnsw-m 64
 ```
 
@@ -125,7 +128,7 @@ Use the labeling tool to create a gold standard dataset for evaluation:
 Launch the interactive demo:
 
 ```bash
-python src/search_demo.py
+python src/search_demo.py --index faiss_index_flat.idx --model text-embedding-3-small --backend openai
 ```
 
 Then enter a natural-language query (e.g. "gift for a yoga lover") and see the top-5 results printed with title, category, price, and distance.
@@ -135,8 +138,10 @@ Then enter a natural-language query (e.g. "gift for a yoga lover") and see the t
 To measure retrieval performance, run:
 
 ```bash
-python src/evaluate.py --products data/products.json --id-map output/id_map.json --index output/faiss_index.idx --gold data/gold.json --k 1 5 10 20 --model all-mpnet-base-v2
+python src/evaluate.py --index faiss_index_flat.idx --k 1 5 10 20 --model text-embedding-3-small --backend openai --products products.json --id-map id_map.json --gold gold.json
 ```
+
+**Important**: Make sure to use the same model and backend that were used to build the index!
 
 This computes metrics against your `data/gold.json`:
 

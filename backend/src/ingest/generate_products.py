@@ -8,7 +8,7 @@ from etsy_fetcher import fetch_etsy_items
 from utils.common import dedupe_by_id, ensure_dir
 
 
-def main(sources, out_path, per_source_limit):
+def main(sources, out_path, num_queries, items_per_query):
     # Load existing products if available
     existing_products = []
     if os.path.exists(out_path):
@@ -25,8 +25,12 @@ def main(sources, out_path, per_source_limit):
     catalog = existing_products.copy()
 
     if "etsy" in sources:
-        print(f"🛠️  Fetching up to {per_source_limit} items from Etsy…")
-        new_items = fetch_etsy_items(limit=per_source_limit)
+        print(
+            f"🛠️  Fetching Etsy items with {num_queries} queries, {items_per_query} items per query…"
+        )
+        new_items = fetch_etsy_items(
+            num_queries=num_queries, items_per_query=items_per_query
+        )
         # Only add items not already in catalog
         existing_ids = {item["id"] for item in existing_products}
         new_items_to_add = [
@@ -36,8 +40,8 @@ def main(sources, out_path, per_source_limit):
         print(f"➕ Adding {len(new_items_to_add)} new items from Etsy")
 
     # if "ebay" in sources:
-    #     print(f"🛠️  Fetching up to {per_source_limit} items from eBay…")
-    #     catalog += fetch_ebay_items(limit=per_source_limit)
+    #     print(f"🛠️  Fetching eBay items with {items_per_query} items per query…")
+    #     catalog += fetch_ebay_items(items_per_query=items_per_query)
 
     # Final deduplication just to be safe
     unique = dedupe_by_id(catalog, key="id")
@@ -59,9 +63,20 @@ if __name__ == "__main__":
         default=["etsy", "ebay"],
         help="Which catalogs to pull",
     )
-    p.add_argument("--limit", type=int, default=3, help="Max items to fetch per source")
+    p.add_argument(
+        "--num-queries",
+        type=int,
+        default=50,
+        help="Number of random queries to generate for API calls",
+    )
+    p.add_argument(
+        "--items-per-query",
+        type=int,
+        default=5,
+        help="Number of items to fetch per query from all sources",
+    )
     p.add_argument(
         "--out", type=str, default="../products.json", help="Output JSON file path"
     )
     args = p.parse_args()
-    main(args.sources, args.out, args.limit)
+    main(args.sources, args.out, args.num_queries, args.items_per_query)

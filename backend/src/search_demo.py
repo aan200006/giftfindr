@@ -9,13 +9,22 @@ import faiss
 def parse_args():
     parser = argparse.ArgumentParser(description="Semantic search using FAISS")
     parser.add_argument(
-        "--index", default="faiss_index.idx", help="FAISS index filename"
+        "--index", default="faiss_index_flat.idx", help="FAISS index filename"
     )
     parser.add_argument(
         "--id-map", default="id_map.json", help="ID mapping JSON filename"
     )
     parser.add_argument(
         "--products", default="products.json", help="Products JSON filename"
+    )
+    parser.add_argument(
+        "--model", default="text-embedding-3-small", help="Model name for embedding"
+    )
+    parser.add_argument(
+        "--backend",
+        choices=["sentence-transformers", "openai"],
+        default="openai",
+        help="Embedding backend to use",
     )
     return parser.parse_args()
 
@@ -34,15 +43,47 @@ products = {
         open(os.path.join(DATA, args.products), "r", encoding="utf-8")
     )
 }
-model = SentenceTransformer("all-mpnet-base-v2")
+
+# Load the appropriate embedding model
+if args.backend == "sentence-transformers":
+    model = SentenceTransformer(args.model)
+elif args.backend == "openai":
+    try:
+        import openai
+        from tenacity import retry, stop_after_attempt, wait_random_exponential
+
+        @retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
+        def get_embedding(text):
+            return (
+                openai.embeddings.create(input=text, model=args.model).data[0].embedding
+            )
+
+    except ImportError:
+        raise ImportError("Please install openai package: pip install openai")
 
 
 def semantic_search(query: str, k: int = 5):
-    q_emb = model.encode([query])
+    # Generate embeddings using the selected backend
+    if args.backend == "sentence-transformers":
+        q_emb = model.encode([query])
+    elif args.backend == "openai":
+        q_emb = np.array([get_embedding(query)])
+
     q_emb = np.array(q_emb, dtype="float32")
+
+    # Check dimensions match
+    if q_emb.shape[1] != index.d:
+        raise ValueError(
+            f"Embedding dimension mismatch: Model produces {q_emb.shape[1]}D vectors but index expects {index.d}D vectors. "
+            f"Make sure you're using the same model that was used to build the index."
+        )
+
     distances, indices = index.search(q_emb, k)
     results = []
     for dist, idx in zip(distances[0], indices[0]):
+        if idx >= len(ids) or idx < 0:
+            print(f"Warning: Invalid index {idx}, skipping")
+            continue
         pid = ids[idx]
         item = products[pid]
         results.append(
@@ -60,16 +101,20 @@ def semantic_search(query: str, k: int = 5):
 
 if __name__ == "__main__":
     print(
-        f"Using index: {args.index}, id map: {args.id_map}, products: {args.products}"
+        f"Using index: {args.index}, id map: {args.id_map}, products: {args.products}, model: {args.model}, backend: {args.backend}"
     )
+    print(f"Index dimension: {index.d}")
     while True:
         q = input("Enter search query (or 'quit'): ")
         if q.lower() == "quit":
             break
-        hits = semantic_search(q, k=5)
-        print("Top results:")
-        for h in hits:
-            print(
-                f"- {h['title']}  ({h['url']}) (${h['price']}) [{h['category']}] (dist={h['distance']:.3f})"
-            )
+        try:
+            hits = semantic_search(q, k=5)
+            print("Top results:")
+            for h in hits:
+                print(
+                    f"- {h['title']} (${h['price']}) [{h['category']}] (dist={h['distance']:.3f})"
+                )
+        except Exception as e:
+            print(f"Error: {e}")
         print()
