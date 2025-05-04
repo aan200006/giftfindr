@@ -49,13 +49,13 @@ const Chat = () => {
         const ageGroup = getAgeGroup(age);
         interests = interests + " " + ageGroup;
       }
-      console.log(interests);
       // const response = await axios.post('http://localhost:5000/api/etsy/listings', {
       //   search: interests,
       //   min: search.min_budget || null,
       //   max: search.max_budget || null
       // });
       const response = await axios.post('http://localhost:5001/api/search', {
+        //query: search
         recipient: search.recipient,
         occasion: search.occasion,
         interests: interests,
@@ -74,7 +74,6 @@ const Chat = () => {
         `\n${index + 1}. [${item.title}](${item.url}) - $${item.price}\n`
       )).join('\n');
 
-      console.log(products);
       if (prods != null) {
         setProductMsg(productMessage);
       }
@@ -129,13 +128,16 @@ const Chat = () => {
   }, [query]);
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') sendMessage();
+    if (e.key === 'Enter') {
+       e.preventDefault();
+       sendMessage();
+    }
   };
 
   return (
     <div className='flex'>
     <div style={{ maxWidth: '700px', margin: 'auto' }}>
-      <div style={{ minHeight: '300px', maxHeight: '500px', overflowY: 'auto', border: '2px solid #CBC3E3', padding: '1rem', marginBottom: '1rem' }}>
+      <div className='ubuntu-regular' style={{ minHeight: '300px', maxHeight: '500px', overflowY: 'auto', border: '2px solid #CBC3E3', padding: '1rem', marginBottom: '1rem' }}>
         {messages.map((msg, idx) => (
           <div key={idx} style={{ marginBottom: '1rem', textAlign: msg.role === 'user' ? 'right' : 'left' }}>
             <strong style={{ color: msg.role === 'user' ? '' : '#bda4dd'}}>{msg.role === 'user' ? 'You' : 'GiftFindr'}: </strong>{msg.content}

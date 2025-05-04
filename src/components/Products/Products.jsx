@@ -15,8 +15,7 @@ const Products = (props) => {
   return (
     <div style={{ maxWidth: '500px', margin: 'auto' }}>
       <div style={{ minHeight: '300px', maxHeight: '500px', padding: '1rem', marginBottom: '4.6rem' }}>
-        <ReactMarkdown>{products}</ReactMarkdown>
-        
+        <ReactMarkdown components={{a: ({node, ...props}) => (<a {...props} target="_blank" rel="noopener noreferrer"/>)}}>{products}</ReactMarkdown>
     </div>
     </div>
   );

@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      <h1>GiftFindr</h1>
+      <h1 className='ubuntu-regular'>GiftFindr</h1>
       <Chat />
     </>
   )
