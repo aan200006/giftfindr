@@ -1,12 +1,12 @@
 // src/Chat.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./Chat.css";
 import Products from './Products/Products';
 import axios from "axios";
 
 const Chat = () => {
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hi! What can I help you look for?' }
+    { role: 'assistant', content: 'Hi! What can I help you look for? List your recipient, recipient\'s interests, age, the occasion, and your budget for the best results! e.g. \'Looking for a birthday gift for my niece turning 5 who likes mermaids. Budget is 20-50\'' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,6 +31,10 @@ const Chat = () => {
     }
   };
 
+  const queryComplete = (q) => {
+    return (q.recipient != null && q.occasion != null && q.interests != null && (q.min_budget != null || q.max_budget != null));
+  }
+
   const getProducts = async (search) => {
     let interests = search.interests;
     let age = search.age;
@@ -52,8 +56,6 @@ const Chat = () => {
       //   max: search.max_budget || null
       // });
       const response = await axios.post('http://localhost:5001/api/search', {
-        // query: interests JAMES: For now, I am going to DIRECTLY send the query to FAISS through here.
-        // query: search,
         recipient: search.recipient,
         occasion: search.occasion,
         interests: interests,
@@ -99,12 +101,11 @@ const Chat = () => {
       });
       const reply = res.data.message;
       const reply2 = queryRes.data.structured;
-
-      console.log(reply2);
       
       if (reply2 != null) {
         setQuery(prevQuery => ({
           ...prevQuery,
+          recipient: reply2.recipient || prevQuery.recipient,
           interests: reply2.interests || prevQuery.interests, 
           age: reply2.age || prevQuery.age, 
           min_budget: reply2.min_budget || prevQuery.min_budget, 
@@ -112,13 +113,6 @@ const Chat = () => {
           occasion: reply2.occasion || prevQuery.occasion
         }));
       }
-      console.log(query)
-      if (JSON.stringify(query) === '{}') {
-        getProducts(query); // JAMES: For now, I am going to DIRECTLY send the query to FAISS through here.
-        // getProducts(input);
-        console.log(products);
-      }
-      console.log("query", query);
       setMessages((previous) => [...previous,  { role: 'assistant', content: reply }]);
     } catch (err) {
       console.error('Error:', err);
@@ -126,6 +120,13 @@ const Chat = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if(queryComplete(query)) {
+      getProducts(query);
+    }
+
+  }, [query]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') sendMessage();

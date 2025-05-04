@@ -48,7 +48,7 @@ def chatbot_json():
     try:
         messages = request.json.get("messages", [])
         previousData = request.json.get("previousStructuredData", {})
-        systemMessage = { "role": "system", "content": 'Extract the gift preferences and format as a structured JSON with keys "recipient", "name", "age", "interests", "min_budget","max_budget", "occasion". If not applicable, set to null. Additionally, provide a natural response to continue the conversation.'}
+        systemMessage = { "role": "system", "content": 'Extract the gift preferences and format as a structured JSON with keys "recipient", "name", "age", "interests", "min_budget","max_budget", "occasion". If not applicable, set to N/A. Additionally, provide a natural response to continue the conversation.'}
         conv = [systemMessage] + messages
         response = openai.chat.completions.create(
             model= "gpt-3.5-turbo",
@@ -57,17 +57,16 @@ def chatbot_json():
 
         aiMessage = response.choices[0].message.content
 
-        jsonMatch = re.search(r"/({.*?})/s", aiMessage, re.DOTALL)
+        jsonMatch = re.search(r"{.*}", aiMessage, re.DOTALL)
         print(aiMessage)
         structured = None
         if jsonMatch:
             try:
-                structured = json.loads(jsonMatch.group(1))
+                structured = json.loads(jsonMatch.group(0))
                 print(structured)
             except json.JSONDecodeError:
                 print("Failed to parse JSON from AI response:", aiMessage)
                 structured = { "error": "Unable to parse structured response:", "message": aiMessage }
-            
         
         if previousData:
             print(previousData)
@@ -75,7 +74,6 @@ def chatbot_json():
                 **previousData,
                 **(structured or {})
             }
-        
         return jsonify({ "message": aiMessage, "structured": structured })
     except Exception as e:
         print('Error fetching from OpenAI:', e)
