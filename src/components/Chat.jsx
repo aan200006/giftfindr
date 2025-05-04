@@ -53,7 +53,11 @@ const Chat = () => {
       // });
       const response = await axios.post('http://localhost:5001/api/search', {
         // query: interests JAMES: For now, I am going to DIRECTLY send the query to FAISS through here.
-        query: search,
+        // query: search,
+        recipient: search.recipient,
+        occasion: search.occasion,
+        interests: interests,
+        price: search.min_budget ?? search.max_budget
       });
 
       if (response.status !== 200) {
@@ -93,7 +97,6 @@ const Chat = () => {
         messages: newMessages,
         previousStructuredData: query
       });
-
       const reply = res.data.message;
       const reply2 = queryRes.data.structured;
 
@@ -105,12 +108,14 @@ const Chat = () => {
           interests: reply2.interests || prevQuery.interests, 
           age: reply2.age || prevQuery.age, 
           min_budget: reply2.min_budget || prevQuery.min_budget, 
-          max_budget: reply2.max_budget || prevQuery.max_budget 
+          max_budget: reply2.max_budget || prevQuery.max_budget,
+          occasion: reply2.occasion || prevQuery.occasion
         }));
       }
-      if (query != null) {
-        //getProducts(query); // JAMES: For now, I am going to DIRECTLY send the query to FAISS through here.
-        getProducts(input);
+      console.log(query)
+      if (JSON.stringify(query) === '{}') {
+        getProducts(query); // JAMES: For now, I am going to DIRECTLY send the query to FAISS through here.
+        // getProducts(input);
         console.log(products);
       }
       console.log("query", query);
@@ -132,7 +137,7 @@ const Chat = () => {
       <div style={{ minHeight: '300px', maxHeight: '500px', overflowY: 'auto', border: '2px solid #CBC3E3', padding: '1rem', marginBottom: '1rem' }}>
         {messages.map((msg, idx) => (
           <div key={idx} style={{ marginBottom: '1rem', textAlign: msg.role === 'user' ? 'right' : 'left' }}>
-            <strong style={{ color: msg.role === 'user' ? '' : '#bda4dd'}}>{msg.role === 'user' ? 'You' : 'GiftFindr'}:</strong>{msg.content}
+            <strong style={{ color: msg.role === 'user' ? '' : '#bda4dd'}}>{msg.role === 'user' ? 'You' : 'GiftFindr'}: </strong>{msg.content}
           </div>
         ))}
       </div>
