@@ -1,6 +1,5 @@
-// import { useState } from 'react'
 import './App.css'
-import Chat from './components/Chat'
+import Chat from './components/ChatBot/Chat'
 
 function App() {
   // const [count, setCount] = useState(0)

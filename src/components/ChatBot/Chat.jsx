@@ -1,7 +1,6 @@
-// src/Chat.js
 import React, { useState, useEffect } from 'react';
 import "./Chat.css";
-import Products from './Products/Products';
+import Products from '../Products/Products';
 import axios from "axios";
 
 const Chat = () => {
@@ -26,8 +25,10 @@ const Chat = () => {
         return "preteen";
       case age < 18:
         return "teen";
-      default:
+      case age < 150:
         return "adult";
+      default:
+        return "";
     }
   };
 
@@ -45,17 +46,11 @@ const Chat = () => {
       if (interests == null) {
         interests = 'gift';
       }
-      if (age != null) {
+      if (age != null && age != "N/A") {
         const ageGroup = getAgeGroup(age);
         interests = interests + " " + ageGroup;
       }
-      // const response = await axios.post('http://localhost:5000/api/etsy/listings', {
-      //   search: interests,
-      //   min: search.min_budget || null,
-      //   max: search.max_budget || null
-      // });
       const response = await axios.post('http://localhost:5001/api/search', {
-        //query: search
         recipient: search.recipient,
         occasion: search.occasion,
         interests: interests,
@@ -124,7 +119,6 @@ const Chat = () => {
     if(queryComplete(query)) {
       getProducts(query);
     }
-
   }, [query]);
 
   const handleKeyDown = (e) => {

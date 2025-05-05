@@ -1,8 +1,6 @@
-// src/Chat.js
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import "./Products.css"
-import axios from "axios";
 
 
 const Products = (props) => {
