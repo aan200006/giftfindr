@@ -123,13 +123,16 @@ def load_resources(
     # Format: [{"query": "...", "relevant_ids": [id1, id2, ...]}, ...]
     gold_list = json.load(open(gold_path, "r", encoding="utf-8"))
     queries = [item["query"] for item in gold_list]
-    gold_sets = [set(item["relevant_ids"]) for item in gold_list]
+    # Normalize gold IDs to strings for consistent comparison
+    gold_sets = [set(str(id_) for id_ in item["relevant_ids"]) for item in gold_list]
 
     # Load embedding model based on backend
     if backend == "sentence-transformers":
+        print(f"Loading SentenceTransformer model: {model_name}")
         model = SentenceTransformer(model_name)
     elif backend == "openai":
         try:
+            print(f"Loading OpenAI model: {model_name}")
             import openai
             from tenacity import retry, stop_after_attempt, wait_random_exponential
 
@@ -186,6 +189,9 @@ def semantic_search(model, index, id_map, query, k):
             # Use a placeholder ID or skip
             result_ids.append(-1)  # Use -1 as a placeholder for invalid IDs
 
+    # Ensure predicted IDs are strings to match gold_sets
+    result_ids = [str(rid) for rid in result_ids]
+
     return result_ids, distances[0].tolist()
 
 
@@ -193,8 +199,8 @@ def precision_recall_at_k(recs, golds, k):
     precisions, recalls = [], []
     for rec_ids, gold in zip(recs, golds):
         preds = rec_ids[:k]
-        # Filter out invalid IDs (placeholder -1)
-        valid_preds = [pid for pid in preds if pid != -1]
+        # Convert predictions to strings and filter out invalid IDs
+        valid_preds = [str(pid) for pid in preds if pid != -1]
         tp = len(set(valid_preds) & gold)
         precisions.append(tp / (len(valid_preds) if valid_preds else 1))
         recalls.append(tp / (len(gold) if gold else 1))
@@ -206,7 +212,8 @@ def mrr_at_k(recs, golds, k):
     for rec_ids, gold in zip(recs, golds):
         rr = 0.0
         for rank, pid in enumerate(rec_ids[:k], start=1):
-            if pid != -1 and pid in gold:
+            pid_str = str(pid)
+            if pid != -1 and pid_str in gold:
                 rr = 1.0 / rank
                 break
         rr_scores.append(rr)
@@ -219,7 +226,10 @@ def ndcg_at_k(recs, golds, k):
 
     ndcgs = []
     for rec_ids, gold in zip(recs, golds):
-        rels = [1 if (pid != -1 and pid in gold) else 0 for pid in rec_ids[:k]]
+        rels = []
+        for pid in rec_ids[:k]:
+            pid_str = str(pid)
+            rels.append(1 if (pid != -1 and pid_str in gold) else 0)
         dcg_val = dcg(rels)
         ideal_rels = sorted(rels, reverse=True)
         idcg_val = dcg(ideal_rels)

@@ -3,6 +3,7 @@ import json, os
 import random
 from pathlib import Path
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 
@@ -12,7 +13,7 @@ with open(CONFIG_PATH, encoding="utf-8") as f:
 
 # Instead of flattening, we'll use the template for structured queries
 query_template = query_config.get(
-    "query_template", "{occasion} gift, {recipient}, {interest}"
+    "query_template", "{occasion}, {recipient}, {interest}"
 )
 recipients = query_config.get("recipient", [])
 occasions = query_config.get("occasion", [])
@@ -25,21 +26,21 @@ if not ETSY_KEY:
         "Etsy API key not found. Please set the ETSY_API_KEY environment variable."
     )
 
-BASE_URL = "https://api.etsy.com/v3/application/listings/active"
+BASE_URL = "https://openapi.etsy.com/v3/application/listings/active"
 
 
 def fetch_etsy(query, limit=50):
     r = requests.get(
         BASE_URL,
         headers={"x-api-key": ETSY_KEY},
-        params={"keywords": query, "limit": limit},
+        params={"keywords": query, "limit": limit, "sort_on": "score"},
     )
     print(f"Fetching {query} from Etsy. Status Code: {r.status_code}")
     data = r.json()
     results = data.get("results", [])
     count = data.get("count", 0)
     print(f"Found {len(results)} results out of {count} total for query: {query}")
-    return r.json().get("results", [])
+    return results
 
 
 def generate_random_queries(n=50):
@@ -94,6 +95,27 @@ def fetch_etsy_items(num_queries=50, items_per_query=5):
     for q in queries:
         items = fetch_etsy(q, limit=items_per_query)
 
+        if len(items) == 0 or len(items) < items_per_query:
+            print(f"[FAILED] items found less than the expected query '{q}'")
+            # Takeout one of the word from the query and try again
+            # This is a simple heuristic to avoid empty queries
+            q_parts = q.split(", ")
+            if len(q_parts) == 3:
+                # Remove the middle component when we have exactly 3 parts
+                q = f"{q_parts[0]}, {q_parts[2]}"
+                items = fetch_etsy(q, limit=items_per_query)
+                if len(items) == 0 or len(items) < items_per_query:
+                    print(f"[FAILED AGAIN] No items found for modified query '{q}'")
+                    continue
+            elif len(q_parts) > 1:
+                q = ", ".join(random.sample(q_parts, len(q_parts) - 1))
+                items = fetch_etsy(q, limit=items_per_query)
+                if len(items) == 0 or len(items) < items_per_query:
+                    print(f"[FAILED AGAIN] No items found for modified query '{q}'")
+                    continue
+            else:
+                continue
+
         # Collect item IDs for this query
         relevant_ids = []
 
@@ -116,13 +138,13 @@ def fetch_etsy_items(num_queries=50, items_per_query=5):
         print(f"Added/updated query '{q}' with {len(relevant_ids)} relevant items")
 
     # Save updated gold data
-    updated_gold_data = list(gold_dict.values())
-    try:
-        with open(gold_path, "w", encoding="utf-8") as f:
-            json.dump(updated_gold_data, f, indent=2)
-        print(f"Updated gold.json with {len(updated_gold_data)} entries")
-    except Exception as e:
-        print(f"Error saving gold data: {e}")
+    # updated_gold_data = list(gold_dict.values())
+    # try:
+    #     with open(gold_path, "w", encoding="utf-8") as f:
+    #         json.dump(updated_gold_data, f, indent=2)
+    #     print(f"Updated gold.json with {len(updated_gold_data)} entries")
+    # except Exception as e:
+    #     print(f"Error saving gold data: {e}")
 
     print(
         f"Collected total of {len(all_items)} items ({len(all_items) - len(existing_products)} new)"

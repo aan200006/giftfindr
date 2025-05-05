@@ -91,6 +91,7 @@ def semantic_search(query: str, k: int = 5):
             {
                 "id": pid,
                 "title": item["title"],
+                "description": item.get("description"),
                 "category": item.get("category"),
                 "price": item.get("price"),
                 "url": item.get("url"),

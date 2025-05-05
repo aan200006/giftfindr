@@ -15,15 +15,22 @@ const qEl = document.getElementById("query"),
   overwriteBtn = document.getElementById("overwrite"),
   removeBtn = document.getElementById("remove");
 
+// Initialize gold as empty array if fetch fails
+gold = [];
+products = [];
+
 Promise.all([
-  fetch("../data/gold.json").then((r) => r.json()),
+  fetch("../data/gold.json")
+    .then((r) => r.json())
+    .catch(() => []),
   fetch("../data/products.json").then((r) => r.json()),
 ]).then(([g, p]) => {
-  gold = g;
+  gold = g || [];
   products = p;
   queueIndices = gold.map((_, i) => i);
   if (!queueIndices.length) {
-    qEl.textContent = "No queries found!";
+    qEl.textContent =
+      "No queries found! Use FAISS Search tab to add new queries.";
     productsEl.innerHTML = "";
     return;
   }
@@ -33,9 +40,16 @@ Promise.all([
 });
 
 function render() {
+  if (!gold || gold.length === 0) {
+    qEl.textContent =
+      "No queries found! Use FAISS Search tab to add new queries.";
+    productsEl.innerHTML = "";
+    return;
+  }
+
   const item = gold[idx];
   qEl.textContent = `${cIdx + 1}/${queueIndices.length}: ${item.query}`;
-  // set price filter defaults from any “$NN” in the query
+  // set price filter defaults from any "$NN" in the query
   const m = item.query.match(/\$(\d+)/);
   minPriceEl.value = 0;
   maxPriceEl.value = m ? m[1] : "";

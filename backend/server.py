@@ -7,6 +7,7 @@ from openai import OpenAI
 import os
 import re
 import json
+import requests
 
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../.env"))
 
@@ -21,8 +22,12 @@ client = OpenAI(api_key=os.getenv("OPEN_API_KEY"))
 def search():
     data = request.json
 
-    k = int(data.get("k", 5))
-    query = "{recipient} gift, {occation}, {interests}"
+    k = int(data.get("k", 20))  # Default to 20 results
+    recipient = data.get("recipient", "person")
+    occasion = data.get("occasion", "gift")
+    interests = data.get("interests", "")
+
+    query = f"{recipient} gift for {occasion} who loves {interests}"
     if not query:
         print("Missing 'query' in request data")
         return jsonify({"error": "Missing 'query'"}), 400
@@ -40,6 +45,29 @@ def search():
         results = [
             result for result in results if float(result["price"]) <= price + offset
         ]
+    # Fetch additional details including images for each result
+    # for result in results:
+    #     try:
+    #         listing_id = result.get("id")
+    #         if listing_id:
+    #             response = requests.get(
+    #                 f"https://openapi.etsy.com/v3/application/listings/{listing_id}",
+    #                 headers={"x-api-key": os.getenv("ETSY_API_KEY")},
+    #             )
+    #             if response.status_code == 200:
+    #                 listing_data = response.json()
+    #                 print(listing_data)
+    #                 if (
+    #                     "images" in listing_data
+    #                     and listing_data["images"]
+    #                     and len(listing_data["images"]) > 0
+    #                 ):
+    #                     result["image_url"] = listing_data["images"][0].get(
+    #                         "url_170x135", ""
+    #                     )
+    #     except Exception as e:
+    #         print(f"Error fetching image for listing {listing_id}: {e}")
+
     return jsonify(results)
 
 

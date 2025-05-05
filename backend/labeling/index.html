@@ -2,12 +2,44 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Gold.json Labeler</title>
+    <title>Gift Finder Tools</title>
     <style>
       body {
         font-family: sans-serif;
         margin: 1em;
+        max-width: 1200px;
+        margin: 0 auto;
       }
+
+      /* Tab styles */
+      .tabs {
+        display: flex;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ccc;
+      }
+      .tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        background: #f5f5f5;
+        border: 1px solid #ccc;
+        border-bottom: none;
+        margin-right: 5px;
+        border-radius: 5px 5px 0 0;
+      }
+      .tab.active {
+        background: white;
+        border-bottom: 1px solid white;
+        margin-bottom: -1px;
+        font-weight: bold;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+
+      /* Original labeling styles */
       .product {
         margin: 0.5em 0;
       }
@@ -17,8 +49,9 @@
         gap: 1em;
         align-items: center;
       }
-      #products {
-        max-height: 300px;
+      #products,
+      #results {
+        max-height: 500px;
         overflow: auto;
         border: 1px solid #ccc;
         padding: 0.5em;
@@ -31,6 +64,8 @@
         background-color: lightgreen;
         font-weight: bold;
       }
+
+      /* Form and button styles */
       input,
       button {
         padding: 0.5em 1em;
@@ -46,37 +81,283 @@
         background-color: #f0f0f0;
         cursor: pointer;
       }
+
+      /* FAISS results styles */
+      .search-form {
+        background-color: #f5f5f5;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      .results {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+      }
+      .search-product {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+      }
+      .search-product h3 {
+        margin-top: 0;
+      }
+      .price {
+        font-weight: bold;
+        color: #4caf50;
+      }
+      .loading {
+        text-align: center;
+        font-size: 18px;
+        margin: 20px 0;
+        display: none;
+      }
     </style>
   </head>
   <body>
-    <h1>Gold.json Labeler</h1>
-    <p>
-      Click a product's text to toggle its checkbox. ← / → arrows to Prev/Next.
-      Del key or "Remove Query" to drop this query and skip. Apply filters then
-      Export when done.
-    </p>
-    <div>
-      <label
-        >Filter products: <input id="filter" placeholder="search title…"
-      /></label>
-      <label
-        >Min Price: <input id="minPrice" type="number" placeholder="0"
-      /></label>
-      <label
-        >Max Price: <input id="maxPrice" type="number" placeholder="Any"
-      /></label>
-      <label
-        >By Query Words: <input id="filterByQuery" type="checkbox"
-      /></label>
+    <h1>Gift Finder Tools</h1>
+
+    <!-- Tab Navigation -->
+    <div class="tabs">
+      <div class="tab active" data-tab="labeling">Gold.json Labeler</div>
+      <div class="tab" data-tab="faiss-search">FAISS Search</div>
     </div>
-    <h2 id="query"></h2>
-    <div id="products"></div>
-    <div class="controls">
-      <button id="prev">← Prev</button>
-      <button id="next">Next →</button>
-      <button id="remove">Remove Query</button>
-      <button id="overwrite">Export gold.json</button>
+
+    <!-- Labeling Tab -->
+    <div id="labeling" class="tab-content active">
+      <p>
+        Click a product's text to toggle its checkbox. ← / → arrows to
+        Prev/Next. Del key or "Remove Query" to drop this query and skip. Apply
+        filters then Export when done.
+      </p>
+      <div>
+        <label
+          >Filter products: <input id="filter" placeholder="search title…"
+        /></label>
+        <label
+          >Min Price: <input id="minPrice" type="number" placeholder="0"
+        /></label>
+        <label
+          >Max Price: <input id="maxPrice" type="number" placeholder="Any"
+        /></label>
+        <label
+          >By Query Words: <input id="filterByQuery" type="checkbox"
+        /></label>
+      </div>
+      <h2 id="query"></h2>
+      <div id="products"></div>
+      <div class="controls">
+        <button id="prev">← Prev</button>
+        <button id="next">Next →</button>
+        <button id="remove">Remove Query</button>
+        <button id="overwrite">Export gold.json</button>
+      </div>
     </div>
+
+    <!-- FAISS Search Tab -->
+    <div id="faiss-search" class="tab-content">
+      <div class="search-form">
+        <div class="form-group">
+          <label for="recipient">Recipient:</label>
+          <input
+            type="text"
+            id="recipient"
+            placeholder="e.g., father, sister, boyfriend"
+          />
+        </div>
+        <div class="form-group">
+          <label for="occasion">Occasion:</label>
+          <input
+            type="text"
+            id="occasion"
+            placeholder="e.g., birthday, Christmas, anniversary"
+          />
+        </div>
+        <div class="form-group">
+          <label for="interests">Interests:</label>
+          <input
+            type="text"
+            id="interests"
+            placeholder="e.g., cooking, gaming, hiking"
+          />
+        </div>
+        <div class="form-group">
+          <label for="price">Maximum Price (optional):</label>
+          <input type="number" id="price" placeholder="e.g., 50" />
+        </div>
+        <button id="search-btn">Search</button>
+        <button
+          id="save-to-gold"
+          style="margin-left: 10px; background-color: #4caf50; color: white"
+        >
+          Save Query to Gold
+        </button>
+      </div>
+
+      <div id="loading" class="loading">Searching for gifts...</div>
+
+      <div id="results-container">
+        <h2 id="results-title">Enter search parameters above to see results</h2>
+        <div id="results" class="results"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./label.js"></script>
+    <script>
+      // Tab functionality
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document
+            .querySelectorAll(".tab")
+            .forEach((t) => t.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((c) => c.classList.remove("active"));
+
+          tab.classList.add("active");
+          document.getElementById(tab.dataset.tab).classList.add("active");
+        });
+      });
+
+      // FAISS Search functionality
+      document
+        .getElementById("search-btn")
+        .addEventListener("click", performSearch);
+      document
+        .getElementById("save-to-gold")
+        .addEventListener("click", saveSearchToGold);
+
+      async function performSearch() {
+        const recipient = document.getElementById("recipient").value;
+        const occasion = document.getElementById("occasion").value;
+        const interests = document.getElementById("interests").value;
+        const price = document.getElementById("price").value;
+
+        if (!recipient || !occasion || !interests) {
+          alert("Please fill in all required fields");
+          return;
+        }
+
+        const loading = document.getElementById("loading");
+        const resultsTitle = document.getElementById("results-title");
+        const resultsContainer = document.getElementById("results");
+
+        loading.style.display = "block";
+        resultsContainer.innerHTML = "";
+        resultsTitle.textContent = "Searching...";
+
+        try {
+          const searchParams = {
+            recipient: recipient,
+            occasion: occasion,
+            interests: interests,
+            k: 20,
+          };
+
+          if (price) {
+            searchParams.price = parseFloat(price);
+          }
+
+          const response = await axios.post(
+            "http://localhost:5001/api/search",
+            searchParams
+          );
+          const results = response.data;
+
+          loading.style.display = "none";
+          resultsTitle.textContent = `Found ${results.length} results for "${recipient} gift for ${occasion} who loves ${interests}"`;
+
+          if (results.length === 0) {
+            resultsContainer.innerHTML =
+              "<p>No results found. Try different search terms.</p>";
+            return;
+          }
+
+          results.forEach((product) => {
+            const productElement = document.createElement("div");
+            productElement.className = "search-product";
+
+            // Add a checkbox for easy labeling
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.value = product.id;
+            checkbox.id = `product-${product.id}`;
+            checkbox.className = "product-checkbox";
+
+            productElement.appendChild(checkbox);
+
+            productElement.innerHTML += `
+              <h3>${product.title}</h3>
+              <p>${
+                product.description
+                  ? product.description.substring(0, 100) + "..."
+                  : "No description available"
+              }</p>
+              <p class="price">$${parseFloat(product.price).toFixed(2)}</p>
+              ${product.category ? `<p>Category: ${product.category}</p>` : ""}
+              <a href="${product.url}" target="_blank">View Product</a>
+            `;
+
+            resultsContainer.appendChild(productElement);
+          });
+        } catch (error) {
+          loading.style.display = "none";
+          resultsTitle.textContent = "Error occurred during search";
+          resultsContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+          console.error("Error fetching search results:", error);
+        }
+      }
+
+      // Function to save the current search to gold.json
+      function saveSearchToGold() {
+        const recipient = document.getElementById("recipient").value;
+        const occasion = document.getElementById("occasion").value;
+        const interests = document.getElementById("interests").value;
+
+        if (!recipient || !occasion || !interests) {
+          alert(
+            "Please fill in all required fields and perform a search first"
+          );
+          return;
+        }
+
+        const query = `${recipient} gift for ${occasion} who loves ${interests}`;
+
+        // Get all checked product IDs
+        const checkedProducts = document.querySelectorAll(
+          ".product-checkbox:checked"
+        );
+        const relevantIds = Array.from(checkedProducts).map(
+          (checkbox) => checkbox.value
+        );
+
+        if (relevantIds.length === 0) {
+          alert("Please select at least one relevant product before saving");
+          return;
+        }
+
+        // Add to gold array
+        gold.push({
+          query: query,
+          relevant_ids: relevantIds,
+        });
+
+        // Update queue indices
+        queueIndices = gold.map((_, i) => i);
+
+        alert(
+          `Query "${query}" saved with ${relevantIds.length} relevant products!`
+        );
+      }
+    </script>
   </body>
 </html>

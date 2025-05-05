@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAISS Search Results</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .search-form {
+        background-color: #f5f5f5;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input,
+      button {
+        padding: 8px;
+        font-size: 16px;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 10px 15px;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      .results {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+      }
+      .product {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+      }
+      .product h3 {
+        margin-top: 0;
+      }
+      .price {
+        font-weight: bold;
+        color: #4caf50;
+      }
+      .loading {
+        text-align: center;
+        font-size: 18px;
+        margin: 20px 0;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>FAISS Search Results</h1>
+
+    <div class="search-form">
+      <div class="form-group">
+        <label for="recipient">Recipient:</label>
+        <input
+          type="text"
+          id="recipient"
+          placeholder="e.g., father, sister, boyfriend"
+        />
+      </div>
+      <div class="form-group">
+        <label for="occasion">Occasion:</label>
+        <input
+          type="text"
+          id="occasion"
+          placeholder="e.g., birthday, Christmas, anniversary"
+        />
+      </div>
+      <div class="form-group">
+        <label for="interests">Interests:</label>
+        <input
+          type="text"
+          id="interests"
+          placeholder="e.g., cooking, gaming, hiking"
+        />
+      </div>
+      <div class="form-group">
+        <label for="price">Maximum Price (optional):</label>
+        <input type="number" id="price" placeholder="e.g., 50" />
+      </div>
+      <button id="search-btn">Search</button>
+      <button
+        id="save-checked"
+        style="margin-left: 10px; background-color: #4caf50"
+      >
+        Save Checked Products
+      </button>
+    </div>
+
+    <div id="loading" class="loading">Searching for gifts...</div>
+
+    <div id="results-container">
+      <h2 id="results-title">Enter search parameters above to see results</h2>
+
+      <!-- Add JSON output section -->
+      <div
+        id="json-output-container"
+        style="display: none; margin-bottom: 20px"
+      >
+        <button
+          id="toggle-json"
+          class="collapsible"
+          style="
+            background-color: #2196f3;
+            width: 100%;
+            text-align: left;
+            padding: 10px;
+            color: white;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px 4px 0 0;
+          "
+        >
+          View JSON (Click to expand/collapse)
+        </button>
+        <div
+          id="json-content"
+          style="
+            display: none;
+            background-color: #f8f8f8;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 4px 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            overflow-x: auto;
+            max-height: 300px;
+            overflow-y: auto;
+          "
+        ></div>
+        <button
+          id="copy-json"
+          style="margin-top: 10px; background-color: #555; display: none"
+        >
+          Copy to Clipboard
+        </button>
+      </div>
+
+      <div id="results" class="results"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      document
+        .getElementById("search-btn")
+        .addEventListener("click", performSearch);
+
+      document
+        .getElementById("save-checked")
+        .addEventListener("click", saveCheckedProducts);
+
+      async function performSearch() {
+        const recipient = document.getElementById("recipient").value;
+        const occasion = document.getElementById("occasion").value;
+        const interests = document.getElementById("interests").value;
+        const price = document.getElementById("price").value;
+
+        if (!recipient || !occasion || !interests) {
+          alert("Please fill in all required fields");
+          return;
+        }
+
+        const loading = document.getElementById("loading");
+        const resultsTitle = document.getElementById("results-title");
+        const resultsContainer = document.getElementById("results");
+
+        loading.style.display = "block";
+        resultsContainer.innerHTML = "";
+        resultsTitle.textContent = "Searching...";
+
+        try {
+          const searchParams = {
+            recipient: recipient,
+            occasion: occasion,
+            interests: interests,
+            k: 20,
+          };
+
+          if (price) {
+            searchParams.price = parseFloat(price);
+          }
+
+          const response = await axios.post(
+            "http://localhost:5001/api/search",
+            searchParams
+          );
+          const results = response.data;
+
+          loading.style.display = "none";
+          resultsTitle.textContent = `Found ${results.length} results for "${recipient} gift for ${occasion} who loves ${interests}"`;
+
+          if (results.length === 0) {
+            resultsContainer.innerHTML =
+              "<p>No results found. Try different search terms.</p>";
+            return;
+          }
+
+          results.forEach((product) => {
+            const productElement = document.createElement("div");
+            productElement.className = "product";
+            productElement.dataset.id = product.id;
+
+            // Create a checkbox and pre-check it
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.checked = true; // Pre-check all boxes
+            checkbox.className = "product-checkbox";
+            checkbox.id = `product-${product.id}`;
+            checkbox.value = product.id;
+
+            // Prevent the checkbox from triggering the container click event
+            checkbox.addEventListener("click", (e) => {
+              e.stopPropagation();
+            });
+
+            productElement.appendChild(checkbox);
+
+            // Add product details
+            const detailsDiv = document.createElement("div");
+            detailsDiv.innerHTML = `
+              <h3>${product.title}</h3>
+              <p>${
+                product.description
+                  ? product.description.substring(0, 100) + "..."
+                  : "No description available"
+              }</p>
+              <p class="price">$${parseFloat(product.price).toFixed(2)}</p>
+              ${product.category ? `<p>Category: ${product.category}</p>` : ""}
+              <a href="${
+                product.url
+              }" target="_blank" onclick="event.stopPropagation()">View Product</a>
+            `;
+
+            productElement.appendChild(detailsDiv);
+
+            // Make the entire product container toggle the checkbox
+            productElement.addEventListener("click", function () {
+              const cb = this.querySelector(".product-checkbox");
+              cb.checked = !cb.checked;
+            });
+
+            resultsContainer.appendChild(productElement);
+          });
+
+          // Show JSON output container after search
+          document.getElementById("json-output-container").style.display =
+            "block";
+
+          // Update JSON content with current search
+          updateJsonOutput();
+        } catch (error) {
+          loading.style.display = "none";
+          resultsTitle.textContent = "Error occurred during search";
+          resultsContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+          console.error("Error fetching search results:", error);
+        }
+      }
+
+      // Add JSON output toggle functionality
+      document
+        .getElementById("toggle-json")
+        .addEventListener("click", function () {
+          const content = document.getElementById("json-content");
+          const copyBtn = document.getElementById("copy-json");
+
+          if (content.style.display === "none") {
+            // Update JSON content before showing it
+            updateJsonOutput();
+
+            content.style.display = "block";
+            copyBtn.style.display = "block";
+            this.style.borderRadius = "4px 4px 0 0";
+          } else {
+            content.style.display = "none";
+            copyBtn.style.display = "none";
+            this.style.borderRadius = "4px";
+          }
+        });
+
+      // Add copy to clipboard functionality
+      document
+        .getElementById("copy-json")
+        .addEventListener("click", function () {
+          const jsonText = document.getElementById("json-content").textContent;
+          navigator.clipboard.writeText(jsonText).then(() => {
+            const originalText = this.textContent;
+            this.textContent = "Copied!";
+            this.style.backgroundColor = "#4CAF50";
+
+            setTimeout(() => {
+              this.textContent = originalText;
+              this.style.backgroundColor = "#555";
+            }, 1500);
+          });
+        });
+
+      // Function to update JSON display
+      function updateJsonOutput() {
+        const recipient = document.getElementById("recipient").value;
+        const occasion = document.getElementById("occasion").value;
+        const interests = document.getElementById("interests").value;
+
+        if (!recipient || !occasion || !interests) return;
+
+        const checkedBoxes = document.querySelectorAll(
+          ".product-checkbox:checked"
+        );
+        const relevantIds = Array.from(checkedBoxes).map((cb) => cb.value);
+
+        // Create single JSON object (not in an array)
+        const jsonData = {
+          query: `${recipient} gift for ${occasion} who loves ${interests}`,
+          relevant_ids: relevantIds,
+        };
+
+        // Format JSON with indentation
+        const formattedJson = JSON.stringify(jsonData, null, 2);
+        document.getElementById("json-content").textContent = formattedJson;
+      }
+
+      // Update JSON when checkboxes change
+      document.addEventListener("change", function (e) {
+        if (e.target.classList.contains("product-checkbox")) {
+          updateJsonOutput();
+        }
+      });
+
+      function saveCheckedProducts() {
+        const recipient = document.getElementById("recipient").value;
+        const occasion = document.getElementById("occasion").value;
+        const interests = document.getElementById("interests").value;
+
+        if (!recipient || !occasion || !interests) {
+          alert(
+            "Please fill in all required fields and perform a search first"
+          );
+          return;
+        }
+
+        const checkedBoxes = document.querySelectorAll(
+          ".product-checkbox:checked"
+        );
+
+        if (checkedBoxes.length === 0) {
+          alert("Please select at least one product before saving");
+          return;
+        }
+
+        // Show and expand JSON display
+        const jsonContainer = document.getElementById("json-output-container");
+        const jsonContent = document.getElementById("json-content");
+        const copyBtn = document.getElementById("copy-json");
+
+        jsonContainer.style.display = "block";
+        jsonContent.style.display = "block";
+        copyBtn.style.display = "block";
+        document.getElementById("toggle-json").style.borderRadius =
+          "4px 4px 0 0";
+
+        // Highlight the copy button to guide user
+        copyBtn.style.backgroundColor = "#4CAF50";
+        setTimeout(() => {
+          copyBtn.style.backgroundColor = "#555";
+        }, 1500);
+
+        // Scroll to JSON section
+        jsonContainer.scrollIntoView({ behavior: "smooth" });
+
+        // Create download as before
+        const productIds = Array.from(checkedBoxes).map((cb) => cb.value);
+        const query = `${recipient} gift for ${occasion} who loves ${interests}`;
+
+        const goldEntry = {
+          query: query,
+          relevant_ids: productIds,
+        };
+
+        const dataStr = JSON.stringify(goldEntry, null, 2);
+        const dataBlob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(dataBlob);
+
+        const downloadLink = document.createElement("a");
+        downloadLink.href = url;
+        downloadLink.download = "new_gold_entry.json";
+        downloadLink.click();
+
+        URL.revokeObjectURL(url);
+      }
+    </script>
+  </body>
+</html>

@@ -65,10 +65,12 @@ def get_embeddings(texts, args):
     start_time = time.time()
 
     if args.backend == "sentence-transformers":
+        print("Using Sentence Transformers for embeddings")
         model = SentenceTransformer(args.model)
         embeddings = model.encode(texts, show_progress_bar=True)
     elif args.backend == "openai":
         try:
+            print("Using OpenAI API for embeddings")
             import openai
             from tenacity import retry, stop_after_attempt, wait_random_exponential
 
@@ -138,7 +140,7 @@ def main():
         category = item.get("category", "")
         price = item.get("price", "")
         # Include more context for better semantic matching
-        text = f"Title: {title}. Description: {desc}. Category: {category}. Price: ${price}"
+        text = f"Title: {title}. Description: {desc}. Category: {category}."
         texts.append(text)
         ids.append(item["id"])
 
