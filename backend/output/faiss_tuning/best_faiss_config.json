@@ -1,0 +1,12 @@
+{
+  "index_type": "hnsw",
+  "params": {
+    "hnsw_m": 32,
+    "ef_construction": 40
+  },
+  "performance": {
+    "recall": 0.6248673767752715,
+    "search_time": 8.715391159057617e-05,
+    "index_size_mb": 12.958902359008789
+  }
+}

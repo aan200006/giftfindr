@@ -1,6 +1,6 @@
 # Giftfindr: FAISS-based Gift Recommendation
 
-Giftfindr is a prototype that turns natural-language gift queries into personalized recommendations using a vector search (FAISS) over a small product catalog.
+Giftfindr is a prototype that turns natural-language gift queries into personalized recommendations using a vector search (FAISS) over a small product catalog, exposed via a simple API and interactive tools.
 
 ---
 
@@ -9,51 +9,79 @@ Giftfindr is a prototype that turns natural-language gift queries into personali
 ```
 backend/
 ├── data/
-│   ├── products.json        # Sample product 
+│   ├── products.json        # Sample product
 │   └── gold.json            # Gold-standard queries and relevant item IDs
 ├── output/
-│   ├── faiss_index_flat.idx # Serialized FAISS index (built by build_index.py)
+│   ├── faiss_index_*.idx    # Serialized FAISS index (built by build_index.py)
 │   ├── id_map.json          # Maps index positions back to product IDs
 │   ├── eval_results.json    # Evaluation metrics JSON output
 │   └── eval_results.csv     # Evaluation metrics CSV output
 │   └── embeddings_*.npy     # Cached embeddings from different backends
+│   └── faiss_tuning/        # Results from FAISS parameter tuning
 ├── src/
 │   ├── build_index.py       # Builds FAISS index from products.json
 │   ├── search_demo.py       # REPL for semantic search over the FAISS index
 │   ├── evaluate.py          # Computes P@K, R@K, MRR@K, nDCG@K against gold.json
+│   ├── server.py            # Flask server providing API endpoints
 │   └── ingest/
 │       ├── generate_products.py  # Fetches products from APIs and merges with existing
 │       └── etsy_fetcher.py       # Handles API calls to Etsy's product catalog
 ├── labeling/
-│   ├── index.html           # Web UI for labeling relevant products for queries
-│   └── label.js             # JavaScript for the labeling interface
-└── requirements.txt         # Python dependencies (faiss-cpu, sentence-transformers, openai, pandas)
+│   ├── index.html           # Web UI for labeling and searching
+│   └── label.js             # JavaScript for the labeling/search interface
+├── requirements.txt         # Python dependencies
+└── .env                     # API keys and environment variables (not committed)
 ```
 
 ---
 
 ## Setup
 
-1. Clone the repo and navigate into the `backend/` folder.
-2. (Optional) Create and activate a Python virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate
-   ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+1.  Clone the repo and navigate into the `backend/` folder.
+2.  (Optional) Create and activate a Python virtual environment:
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
+3.  Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+4.  Create a `.env` file in the `backend/` directory and add your OpenAI API key:
+    ```env
+    OPENAI_API_KEY=your_openai_api_key_here
+    # Add ETSY_API_KEY if using Etsy ingestion
+    # ETSY_API_KEY=your_etsy_api_key_here
+    ```
+
+---
+
+## Running the Server
+
+The Flask server provides the API endpoints for search and chatbot functionality.
+
+```bash
+python src/server.py
+```
+
+The server will run on `http://localhost:5001` by default.
+
+### API Endpoints
+
+- `POST /api/search`: Performs semantic search. Expects JSON body with `recipient`, `occasion`, `interests`, and optional `price`, `k`. Returns a list of product results.
+- `POST /api/chatbot`: Basic chatbot interaction using OpenAI. Expects `messages` array.
+- `POST /api/chatbot/json`: Chatbot interaction that attempts to extract structured data (recipient, age, interests, budget, occasion) from the conversation. Expects `messages` and optional `previousStructuredData`.
 
 ---
 
 ## Complete Workflow
 
-### 1. Data Ingestion
+### 1. Data Ingestion (Optional)
 
-Generate or update your product catalog:
+Generate or update your product catalog using external APIs (e.g., Etsy):
 
 ```bash
+# Make sure ETSY_API_KEY is in your .env file
 python src/ingest/generate_products.py --sources etsy --items-per-query 5 --num-queries 20 --out data/products.json
 ```
 
@@ -107,25 +135,40 @@ You can also choose between embeddings from Sentence Transformers or OpenAI:
 python src/build_index.py --backend openai --model text-embedding-3-small
 ```
 
-### 3. Create and Label Gold Standard Data
+### 3. Run the Backend Server
 
-Use the labeling tool to create a gold standard dataset for evaluation:
+Start the Flask server to enable API access for the labeling tool and other clients:
 
-1. Start a local server in the project folder:
+```bash
+python src/server.py
+```
 
-   ```bash
-   # Using Python's built-in server
-   python -m http.server
-   ```
+### 4. Create and Label Gold Standard Data
 
-2. Navigate to `http://localhost:8000/labeling/` in your browser
-3. Add relevant product IDs for each query
-4. Export the labeled data to `gold.json` when done
-5. Move the file to the `data/` directory
+Use the integrated labeling and search tool to create/refine a gold standard dataset for evaluation:
 
-### 4. Try Semantic Search
+1.  With the server running, start a local HTTP server in the `backend/` directory:
+    ```bash
+    # Using Python's built-in server (run in a separate terminal)
+    python -m http.server 8000
+    ```
+2.  Navigate to `http://localhost:8000/labeling/` in your browser.
+3.  **Gold.json Labeler Tab:**
+    - Review existing queries from `data/gold.json`.
+    - Check/uncheck products to mark them as relevant/irrelevant for the current query.
+    - Use filters (text, price) to narrow down the product list.
+    - Navigate with Prev/Next buttons or ←/→ arrow keys.
+    - Use "Remove Query" or Del key to discard a query.
+    - Click "Export gold.json" to download the modified data. **You must manually move the downloaded `gold.json` file to the `backend/data/` directory, overwriting the old one.**
+4.  **FAISS Search Tab:**
+    - Enter search criteria (recipient, occasion, interests, max price).
+    - Click "Search" to query the `/api/search` endpoint.
+    - Results are displayed with checkboxes. Select the products relevant to your query.
+    - Click "Save Query to Gold" to add the current query and selected product IDs to the dataset being built in the browser. This new entry will be included when you export using the "Export gold.json" button on the "Gold.json Labeler" tab.
 
-Launch the interactive demo:
+### 5. Try Semantic Search (CLI Demo)
+
+Launch the interactive command-line demo:
 
 ```bash
 python src/search_demo.py --index faiss_index_flat.idx --model text-embedding-3-small --backend openai
@@ -133,9 +176,9 @@ python src/search_demo.py --index faiss_index_flat.idx --model text-embedding-3-
 
 Then enter a natural-language query (e.g. "gift for a yoga lover") and see the top-5 results printed with title, category, price, and distance.
 
-### 5. Automated Evaluation
+### 6. Automated Evaluation
 
-To measure retrieval performance, run:
+To measure retrieval performance against your curated `data/gold.json`:
 
 ```bash
 python src/evaluate.py --index faiss_index_flat.idx --k 1 5 10 20 --model text-embedding-3-small --backend openai --products products.json --id-map id_map.json --gold gold.json

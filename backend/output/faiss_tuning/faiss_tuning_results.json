@@ -1,0 +1,823 @@
+{
+  "backend": "openai",
+  "model": "text-embedding-3-small",
+  "embeddings_dim": 1536,
+  "num_vectors": 2118,
+  "results": [
+    {
+      "index_type": "flat",
+      "params": {},
+      "build_time": 0.011533975601196289,
+      "search_time": 0.0006553173065185547,
+      "recall": 0.6207007101086048,
+      "index_size_mb": 12.410199165344238
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 50,
+        "m": 4,
+        "nbits": 8,
+        "best_nprobe": 8,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.09972535505430243,
+            "search_time": 9.78708267211914e-05
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.11801482873851295,
+            "search_time": 5.626678466796875e-05
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.11801482873851295,
+            "search_time": 5.841255187988281e-05
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.11801482873851295,
+            "search_time": 6.600618362426758e-05
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.11801482873851295,
+            "search_time": 7.466077804565429e-05
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.11801482873851295,
+            "search_time": 7.265806198120117e-05
+          }
+        ]
+      },
+      "build_time": 0.16497111320495605,
+      "search_time": 5.626678466796875e-05,
+      "recall": 0.11801482873851295,
+      "index_size_mb": 1.8177604675292969
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 50,
+        "m": 8,
+        "nbits": 8,
+        "best_nprobe": 16,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.127562656641604,
+            "search_time": 5.930662155151367e-05
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.17558897243107768,
+            "search_time": 5.925893783569336e-05
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.1782205513784461,
+            "search_time": 6.201267242431641e-05
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.1782205513784461,
+            "search_time": 7.18235969543457e-05
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.1782205513784461,
+            "search_time": 8.200407028198242e-05
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.1782205513784461,
+            "search_time": 8.00013542175293e-05
+          }
+        ]
+      },
+      "build_time": 0.2125861644744873,
+      "search_time": 6.201267242431641e-05,
+      "recall": 0.1782205513784461,
+      "index_size_mb": 1.8258399963378906
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 50,
+        "m": 16,
+        "nbits": 8,
+        "best_nprobe": 16,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.16517961570593148,
+            "search_time": 5.5694580078125e-05
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.23930242272347538,
+            "search_time": 6.331205368041992e-05
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.2600918964076859,
+            "search_time": 6.935596466064453e-05
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.2600918964076859,
+            "search_time": 8.432865142822265e-05
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.2600918964076859,
+            "search_time": 0.00011053085327148438
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.2600918964076859,
+            "search_time": 0.00010151863098144532
+          }
+        ]
+      },
+      "build_time": 0.37777113914489746,
+      "search_time": 6.935596466064453e-05,
+      "recall": 0.2600918964076859,
+      "index_size_mb": 1.8419990539550781
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 100,
+        "m": 4,
+        "nbits": 8,
+        "best_nprobe": 8,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.17188909774436092,
+            "search_time": 6.511211395263672e-05
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.19674289891395155,
+            "search_time": 6.521940231323242e-05
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.19674289891395155,
+            "search_time": 7.619857788085938e-05
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.19674289891395155,
+            "search_time": 7.467269897460937e-05
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.19674289891395155,
+            "search_time": 8.404254913330078e-05
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.19674289891395155,
+            "search_time": 0.00010033845901489258
+          }
+        ]
+      },
+      "build_time": 0.15088725090026855,
+      "search_time": 6.521940231323242e-05,
+      "recall": 0.19674289891395155,
+      "index_size_mb": 2.1111106872558594
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 100,
+        "m": 8,
+        "nbits": 8,
+        "best_nprobe": 8,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.15382309941520467,
+            "search_time": 6.290674209594727e-05
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.20202485380116958,
+            "search_time": 6.723403930664062e-05
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.20202485380116958,
+            "search_time": 7.125139236450196e-05
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.20202485380116958,
+            "search_time": 7.778406143188477e-05
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.20202485380116958,
+            "search_time": 9.385347366333007e-05
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.20202485380116958,
+            "search_time": 0.00011802911758422852
+          }
+        ]
+      },
+      "build_time": 0.23115301132202148,
+      "search_time": 6.723403930664062e-05,
+      "recall": 0.20202485380116958,
+      "index_size_mb": 2.119190216064453
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 100,
+        "m": 16,
+        "nbits": 8,
+        "best_nprobe": 16,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.21676274018379282,
+            "search_time": 6.519556045532226e-05
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.2963982873851295,
+            "search_time": 7.079839706420898e-05
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.2990298663324979,
+            "search_time": 7.671117782592773e-05
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.2990298663324979,
+            "search_time": 8.857250213623047e-05
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.2990298663324979,
+            "search_time": 0.00011519193649291992
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.2990298663324979,
+            "search_time": 0.00015079975128173828
+          }
+        ]
+      },
+      "build_time": 0.40032100677490234,
+      "search_time": 7.671117782592773e-05,
+      "recall": 0.2990298663324979,
+      "index_size_mb": 2.1353492736816406
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 256,
+        "m": 4,
+        "nbits": 8,
+        "best_nprobe": 8,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.19008876357560567,
+            "search_time": 8.829832077026368e-05
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.24710004177109438,
+            "search_time": 9.10043716430664e-05
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.24710004177109438,
+            "search_time": 9.41634178161621e-05
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.24710004177109438,
+            "search_time": 0.00010396242141723633
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.24710004177109438,
+            "search_time": 0.00012668371200561524
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.24710004177109438,
+            "search_time": 0.00014510154724121094
+          }
+        ]
+      },
+      "build_time": 0.17122912406921387,
+      "search_time": 9.10043716430664e-05,
+      "recall": 0.24710004177109438,
+      "index_size_mb": 3.0263633728027344
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 256,
+        "m": 8,
+        "nbits": 8,
+        "best_nprobe": 8,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.19647034252297407,
+            "search_time": 8.789300918579101e-05
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.24910192147034244,
+            "search_time": 9.261369705200195e-05
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.24910192147034244,
+            "search_time": 9.486675262451171e-05
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.24910192147034244,
+            "search_time": 0.0001056075096130371
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.24910192147034244,
+            "search_time": 0.00013437271118164063
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.24910192147034244,
+            "search_time": 0.00014791488647460937
+          }
+        ]
+      },
+      "build_time": 0.2545201778411865,
+      "search_time": 9.261369705200195e-05,
+      "recall": 0.24910192147034244,
+      "index_size_mb": 3.034442901611328
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 256,
+        "m": 16,
+        "nbits": 8,
+        "best_nprobe": 32,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.20767335004177107,
+            "search_time": 8.721351623535157e-05
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.3223412698412699,
+            "search_time": 9.499788284301758e-05
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.33734126984126983,
+            "search_time": 0.00010324716567993164
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.33997284878863826,
+            "search_time": 0.00011640787124633789
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.33997284878863826,
+            "search_time": 0.0001512765884399414
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.33997284878863826,
+            "search_time": 0.0001934051513671875
+          }
+        ]
+      },
+      "build_time": 0.42815589904785156,
+      "search_time": 0.00011640787124633789,
+      "recall": 0.33997284878863826,
+      "index_size_mb": 3.0506019592285156
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 512,
+        "m": 4,
+        "nbits": 8,
+        "best_nprobe": 8,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.18958751044277358,
+            "search_time": 0.00012650489807128907
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.30289891395154556,
+            "search_time": 0.00013146400451660156
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.30289891395154556,
+            "search_time": 0.00013800859451293946
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.30289891395154556,
+            "search_time": 0.00014140605926513672
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.29289891395154555,
+            "search_time": 0.0001537322998046875
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.29289891395154555,
+            "search_time": 0.0002257823944091797
+          }
+        ]
+      },
+      "build_time": 0.23045921325683594,
+      "search_time": 0.00013146400451660156,
+      "recall": 0.30289891395154556,
+      "index_size_mb": 4.528316497802734
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 512,
+        "m": 8,
+        "nbits": 8,
+        "best_nprobe": 16,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.1948506683375104,
+            "search_time": 0.00013002157211303711
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.33303049289891395,
+            "search_time": 0.00013486146926879882
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.33566207184628233,
+            "search_time": 0.0001363515853881836
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.33566207184628233,
+            "search_time": 0.00016275644302368164
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.33566207184628233,
+            "search_time": 0.0001786947250366211
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.33566207184628233,
+            "search_time": 0.00023033618927001954
+          }
+        ]
+      },
+      "build_time": 0.26270413398742676,
+      "search_time": 0.0001363515853881836,
+      "recall": 0.33566207184628233,
+      "index_size_mb": 4.536396026611328
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 512,
+        "m": 16,
+        "nbits": 8,
+        "best_nprobe": 16,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.19485066833751044,
+            "search_time": 0.00012950897216796876
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.38495300751879696,
+            "search_time": 0.00013666152954101564
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.397453007518797,
+            "search_time": 0.00014290809631347656
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.389953007518797,
+            "search_time": 0.00016142129898071288
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.389953007518797,
+            "search_time": 0.00018489360809326172
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.389953007518797,
+            "search_time": 0.00023530721664428712
+          }
+        ]
+      },
+      "build_time": 0.4235219955444336,
+      "search_time": 0.00014290809631347656,
+      "recall": 0.397453007518797,
+      "index_size_mb": 4.552555084228516
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 1024,
+        "m": 4,
+        "nbits": 8,
+        "best_nprobe": 8,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.16715643274853803,
+            "search_time": 0.00021282434463500976
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.35832811194653297,
+            "search_time": 0.00021899938583374022
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.3541614452798663,
+            "search_time": 0.00022104978561401367
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.3541614452798663,
+            "search_time": 0.00022857189178466798
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.3541614452798663,
+            "search_time": 0.00024263858795166017
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.3541614452798663,
+            "search_time": 0.00027343034744262693
+          }
+        ]
+      },
+      "build_time": 0.24648404121398926,
+      "search_time": 0.00021899938583374022,
+      "recall": 0.35832811194653297,
+      "index_size_mb": 7.532222747802734
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 1024,
+        "m": 8,
+        "nbits": 8,
+        "best_nprobe": 16,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.16715643274853803,
+            "search_time": 0.0002128005027770996
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.3590298663324979,
+            "search_time": 0.00023020505905151366
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.3741614452798663,
+            "search_time": 0.0002751350402832031
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.3741614452798663,
+            "search_time": 0.0002864241600036621
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.3741614452798663,
+            "search_time": 0.00029958486557006835
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.3741614452798663,
+            "search_time": 0.0003517270088195801
+          }
+        ]
+      },
+      "build_time": 0.3179659843444824,
+      "search_time": 0.0002751350402832031,
+      "recall": 0.3741614452798663,
+      "index_size_mb": 7.540302276611328
+    },
+    {
+      "index_type": "ivfpq",
+      "params": {
+        "nlist": 1024,
+        "m": 16,
+        "nbits": 8,
+        "best_nprobe": 16,
+        "nprobe_results": [
+          {
+            "nprobe": 1,
+            "recall": 0.16715643274853803,
+            "search_time": 0.00021561384201049805
+          },
+          {
+            "nprobe": 8,
+            "recall": 0.3967857142857143,
+            "search_time": 0.0002182602882385254
+          },
+          {
+            "nprobe": 16,
+            "recall": 0.4019172932330827,
+            "search_time": 0.0002279996871948242
+          },
+          {
+            "nprobe": 32,
+            "recall": 0.4019172932330827,
+            "search_time": 0.00024535655975341795
+          },
+          {
+            "nprobe": 64,
+            "recall": 0.4019172932330827,
+            "search_time": 0.0002840876579284668
+          },
+          {
+            "nprobe": 128,
+            "recall": 0.4019172932330827,
+            "search_time": 0.0003510951995849609
+          }
+        ]
+      },
+      "build_time": 0.4846501350402832,
+      "search_time": 0.0002279996871948242,
+      "recall": 0.4019172932330827,
+      "index_size_mb": 7.556461334228516
+    },
+    {
+      "index_type": "hnsw",
+      "params": {
+        "hnsw_m": 16,
+        "ef_construction": 40
+      },
+      "build_time": 0.043457984924316406,
+      "search_time": 5.499124526977539e-05,
+      "recall": 0.5165340434419382,
+      "index_size_mb": 12.700929641723633
+    },
+    {
+      "index_type": "hnsw",
+      "params": {
+        "hnsw_m": 16,
+        "ef_construction": 80
+      },
+      "build_time": 0.047972917556762695,
+      "search_time": 5.470514297485351e-05,
+      "recall": 0.5977840434419381,
+      "index_size_mb": 12.700929641723633
+    },
+    {
+      "index_type": "hnsw",
+      "params": {
+        "hnsw_m": 16,
+        "ef_construction": 200
+      },
+      "build_time": 0.08711814880371094,
+      "search_time": 6.202459335327148e-05,
+      "recall": 0.622784043441938,
+      "index_size_mb": 12.700929641723633
+    },
+    {
+      "index_type": "hnsw",
+      "params": {
+        "hnsw_m": 32,
+        "ef_construction": 40
+      },
+      "build_time": 0.05681014060974121,
+      "search_time": 8.715391159057617e-05,
+      "recall": 0.6248673767752715,
+      "index_size_mb": 12.958902359008789
+    },
+    {
+      "index_type": "hnsw",
+      "params": {
+        "hnsw_m": 32,
+        "ef_construction": 80
+      },
+      "build_time": 0.05366802215576172,
+      "search_time": 4.831552505493164e-05,
+      "recall": 0.5957007101086047,
+      "index_size_mb": 12.958902359008789
+    },
+    {
+      "index_type": "hnsw",
+      "params": {
+        "hnsw_m": 32,
+        "ef_construction": 200
+      },
+      "build_time": 0.10620689392089844,
+      "search_time": 6.461143493652344e-05,
+      "recall": 0.6207007101086048,
+      "index_size_mb": 12.958902359008789
+    },
+    {
+      "index_type": "hnsw",
+      "params": {
+        "hnsw_m": 64,
+        "ef_construction": 40
+      },
+      "build_time": 0.05478405952453613,
+      "search_time": 0.00011103153228759765,
+      "recall": 0.6248673767752715,
+      "index_size_mb": 13.476835250854492
+    },
+    {
+      "index_type": "hnsw",
+      "params": {
+        "hnsw_m": 64,
+        "ef_construction": 80
+      },
+      "build_time": 0.11154699325561523,
+      "search_time": 0.00013180971145629883,
+      "recall": 0.6248673767752715,
+      "index_size_mb": 13.476835250854492
+    },
+    {
+      "index_type": "hnsw",
+      "params": {
+        "hnsw_m": 64,
+        "ef_construction": 200
+      },
+      "build_time": 0.08940601348876953,
+      "search_time": 6.748437881469727e-05,
+      "recall": 0.6019507101086047,
+      "index_size_mb": 13.476835250854492
+    },
+    {
+      "index_type": "hnsw",
+      "params": {
+        "hnsw_m": 128,
+        "ef_construction": 40
+      },
+      "build_time": 0.051136016845703125,
+      "search_time": 0.00013151168823242188,
+      "recall": 0.6207007101086048,
+      "index_size_mb": 14.508817672729492
+    },
+    {
+      "index_type": "hnsw",
+      "params": {
+        "hnsw_m": 128,
+        "ef_construction": 80
+      },
+      "build_time": 0.08425188064575195,
+      "search_time": 0.00016279220581054686,
+      "recall": 0.6207007101086048,
+      "index_size_mb": 14.508817672729492
+    },
+    {
+      "index_type": "hnsw",
+      "params": {
+        "hnsw_m": 128,
+        "ef_construction": 200
+      },
+      "build_time": 0.2009599208831787,
+      "search_time": 0.00017472505569458008,
+      "recall": 0.6207007101086048,
+      "index_size_mb": 14.508817672729492
+    }
+  ]
+}

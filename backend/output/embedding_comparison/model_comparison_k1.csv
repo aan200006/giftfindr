@@ -1,0 +1,4 @@
+backend,model,precision,recall,mrr,ndcg,build_time,embedding_time
+openai,text-embedding-3-small,1.0,0.09156537176274018,1.0,1.0,4.720348834991455,
+sentence-transformers,all-MiniLM-L6-v2,0.8,0.08023078529657476,0.8,0.8,4.134957790374756,
+sentence-transformers,all-mpnet-base-v2,0.75,0.06295426065162907,0.75,0.75,3.8726348876953125,

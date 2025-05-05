@@ -1,0 +1,9 @@
+'NoneType' object has no attribute 'cadam32bit_grad_fp32'
+Loading cached embeddings from /Users/jameshan/Documents/github/giftfindr/backend/output/embeddings_sentence-transformers_all-mpnet-base-v2.npy
+Building FLAT index (exact search)
+Indexed 2118 products → /Users/jameshan/Documents/github/giftfindr/backend/output/faiss_index_flat.idx
+
+
+STDERR:
+/opt/anaconda3/lib/python3.11/site-packages/bitsandbytes/cextension.py:34: UserWarning: The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers, 8-bit multiplication, and GPU quantization are unavailable.
+  warn("The installed version of bitsandbytes was compiled without GPU support. "
