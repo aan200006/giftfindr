@@ -47,8 +47,8 @@ python src/server.py
 
 API endpoints:
 
-/api/chatbot: handles user–assistant conversation
-/api/chatbot/json: returns structured query data
+/api/chatbot: handles user–assistant conversation\
+/api/chatbot/json: returns structured query data\
 /api/search: returns product recommendations
 
 ## Scripts
