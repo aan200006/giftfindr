@@ -49,7 +49,7 @@ def chatbot():
         messages = request.json.get("messages", [])
         system_prompt = {
             "role": "system",
-            "content": 'Ask for things like "recipient", "name", "age","interests", "budget", "occasion"',
+            "content": 'Ask for things like "recipient", "age","interests", "budget", "occasion"',
         }
         conv = [system_prompt] + messages
         response = openai.chat.completions.create(model="gpt-3.5-turbo", messages=conv)
@@ -70,7 +70,7 @@ def chatbot_json():
         previousData = request.json.get("previousStructuredData", {})
         systemMessage = {
             "role": "system",
-            "content": 'Extract the gift preferences and format as a structured JSON with keys "recipient", "name", "age", "interests", "min_budget","max_budget", "occasion". If not applicable, set to N/A. Additionally, provide a natural response to continue the conversation.',
+            "content": 'Extract the gift preferences and format as a structured JSON with keys "recipient", "age", "interests", "min_budget","max_budget", "occasion". If not applicable, set to N/A. Ensure budget is saved as a number. Create a new structured json if the user looks for another gift.',
         }
         conv = [systemMessage] + messages
         response = openai.chat.completions.create(
