@@ -2,3 +2,5 @@ faiss-cpu
 sentence-transformers
 openai
 python-dotenv
+flask
+flask_cors

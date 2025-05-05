@@ -7,9 +7,9 @@ Giftfindr is a prototype that turns natural-language gift queries into personali
 ## Repository Structure
 
 ```
-faiss/
+backend/
 ├── data/
-│   └── products.json        # Sample product catalog
+│   ├── products.json        # Sample product 
 │   └── gold.json            # Gold-standard queries and relevant item IDs
 ├── output/
 │   ├── faiss_index_flat.idx # Serialized FAISS index (built by build_index.py)
@@ -34,7 +34,7 @@ faiss/
 
 ## Setup
 
-1. Clone the repo and navigate into the `faiss/` folder.
+1. Clone the repo and navigate into the `backend/` folder.
 2. (Optional) Create and activate a Python virtual environment:
    ```bash
    python -m venv venv
