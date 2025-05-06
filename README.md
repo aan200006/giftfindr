@@ -1,6 +1,8 @@
 # GiftFindr
 
-GiftFindr is a full-stack prototype that turns natural-language gift queries into personalized recommendations. It offers a React-based frontend chat interface, a Flask/Python backend with FAISS vector search, and supporting scripts for tuning and evaluation.
+GiftFindr is a full-stack prototype that turns natural-language gift queries into personalized recommendations. It offers a React-based frontend chat interface, a Flask/Python backend with FAISS vector search, and supporting scripts for tuning and evaluation.\
+\
+Video Demo: https://www.youtube.com/watch?v=KwBERkRoszI
 
 ---
 
